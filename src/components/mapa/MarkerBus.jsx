@@ -3,11 +3,8 @@ import { divIcon } from 'leaflet'
 
 /**
  * Genera el HTML del ícono de bus como string puro.
- * NO usamos renderToStaticMarkup para evitar importar react-dom/server,
- * que provoca una segunda instancia de React y rompe los hooks de react-leaflet.
  */
-function crearIconoBus() {
-  // SVG del bus (equivalente a Tabler IconBus, simplificado)
+function crearIconoBus(color = '#1d6fe8') {
   const busSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
          fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -22,30 +19,34 @@ function crearIconoBus() {
 
   const html = `
     <div class="bus-marker-wrapper">
-      <div class="bus-marker-pulse"></div>
-      <div class="bus-marker-icon">${busSvg}</div>
+      <div class="bus-marker-pulse" style="background: ${color}40"></div>
+      <div class="bus-marker-icon" style="background: ${color}">${busSvg}</div>
     </div>
   `
 
   return divIcon({
     html,
-    className:   '',     // limpia la clase blanca por defecto de Leaflet
+    className:   '',
     iconSize:    [44, 44],
     iconAnchor:  [22, 22],
     popupAnchor: [0, -24],
   })
 }
 
-// Creado UNA sola vez fuera del componente para no regenerarlo en cada render
-const iconoBus = crearIconoBus()
+const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
 
 /**
- * MarkerBus — marcador de bus simulado con pulso animado.
- * @param {{ position: [number, number], label?: string }} props
+ * MarkerBus — marcador de bus con pulso animado.
+ * @param {{ position: [number, number], label?: string, rutaCodigo?: string, invisible?: boolean }} props
  */
-export default function MarkerBus({ position, label = 'B1 · Av. España' }) {
+export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', invisible = false }) {
+  const color = COLORES_RUTA[rutaCodigo] ?? '#1d6fe8'
+  const icono = crearIconoBus(color)
+
+  if (invisible) return null
+
   return (
-    <Marker position={position} icon={iconoBus}>
+    <Marker position={position} icon={icono}>
       <Popup closeButton={false} offset={[0, -10]}>
         <div style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -55,16 +56,16 @@ export default function MarkerBus({ position, label = 'B1 · Av. España' }) {
           whiteSpace: 'nowrap',
           padding:    '2px 0',
         }}>
-          🚌 {label}
+          🚌 {label || `Ruta ${rutaCodigo}`}
         </div>
         <div style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize:   '0.75rem',
-          color:      '#1d6fe8',
+          color,
           fontWeight: 500,
           marginTop:  '2px',
         }}>
-          Hace 1 min · En servicio
+          Reportado en vivo · En servicio
         </div>
       </Popup>
     </Marker>

@@ -33,7 +33,7 @@ const VENTANA_MIN   = 15   // minutos hacia atrás para "reportes activos"
  * @param {string|null} estado   "lleno" | "vacio" | "cambio_ruta" | null
  * @returns {Promise<void>}
  */
-export async function crearReporte(rutaId, uid, estado = null) {
+export async function crearReporte(rutaId, uid, estado = null, lat = null, lng = null) {
   const ahora = serverTimestamp()
 
   // 1. Nuevo reporte en la colección principal
@@ -41,6 +41,8 @@ export async function crearReporte(rutaId, uid, estado = null) {
     rutaId,
     uid,
     estado,                // null si el usuario no seleccionó estado
+    lat,
+    lng,
     timestamp: ahora,
   })
 

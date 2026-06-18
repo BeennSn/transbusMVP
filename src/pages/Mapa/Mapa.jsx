@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   IconBus,
   IconClock,
@@ -6,6 +6,7 @@ import {
   IconCircleCheckFilled,
   IconUsers,
   IconAlertTriangle,
+  IconChevronDown,
 } from '@tabler/icons-react'
 import MapaLeaflet         from '@/components/mapa/MapaLeaflet'
 import LoginModal          from '@/components/common/LoginModal'
@@ -13,11 +14,19 @@ import ModalReporteExito   from '@/components/mapa/ModalReporteExito'
 import { useAuth }         from '@/context/AuthContext'
 import useReportesEnVivo   from '@/hooks/useReportesEnVivo'
 import { crearReporte, obtenerTotalHistorico } from '@/services/reportesService'
+import { getRutas }        from '@/services/rutasService'
 
-/* ── Ruta que se muestra en /mapa (mock hasta tener selección dinámica) */
-const RUTA_ID     = 'b1-nuevo-california'
-const RUTA_NOMBRE = 'B1 de Nuevo California'
-const RUTA_COD    = 'B1'
+const RUTAS = getRutas()
+
+function obtenerUltimaPosicion(reportes) {
+  const conUbicacion = reportes.filter(r => r.lat && r.lng)
+  if (conUbicacion.length === 0) return null
+  return conUbicacion.reduce((a, b) => {
+    const ta = a.timestamp?.toMillis?.() ?? 0
+    const tb = b.timestamp?.toMillis?.() ?? 0
+    return ta > tb ? a : b
+  })
+}
 
 /* ─────────────────────────────────────────────────────────
    Tiers de confianza (lógica validada — no modificar)
@@ -123,8 +132,8 @@ function SelectorEstado({ seleccionado, onChange }) {
 /* ── Página principal ──────────────────────────────────── */
 export default function Mapa() {
   const { usuario } = useAuth()
-  const { cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(RUTA_ID)
 
+  const [rutaActiva,     setRutaActiva]     = useState(RUTAS[0])
   const [sheetExpanded,  setSheetExpanded]  = useState(false)
   const [mostrarLogin,   setMostrarLogin]   = useState(false)
   const [mostrarExito,   setMostrarExito]   = useState(false)
@@ -132,13 +141,19 @@ export default function Mapa() {
   const [enviando,       setEnviando]       = useState(false)
   const [totalHistorico, setTotalHistorico] = useState(0)
   const [errorReporte,   setErrorReporte]   = useState(null)
+  const [selectAbierto,  setSelectAbierto]  = useState(false)
+
+  const { reportesActivos, cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(rutaActiva.id)
+
+  const ultimoReporte = useMemo(() => obtenerUltimaPosicion(reportesActivos), [reportesActivos])
+  const posicionBus = ultimoReporte ? [ultimoReporte.lat, ultimoReporte.lng] : null
 
   const tier = getTierConfianza(cantidadActiva)
 
-  // Carga el contador histórico al montar
+  // Carga el contador histórico al cambiar de ruta
   useEffect(() => {
-    obtenerTotalHistorico(RUTA_ID).then(setTotalHistorico)
-  }, [])
+    obtenerTotalHistorico(rutaActiva.id).then(setTotalHistorico)
+  }, [rutaActiva.id])
 
   /* ── Flujo de reporte ────────────────────────────────── */
   async function handleReporte() {
@@ -149,9 +164,22 @@ export default function Mapa() {
     setEnviando(true)
     setErrorReporte(null)
     try {
-      await crearReporte(RUTA_ID, usuario.uid, estadoSelected)
-      // Actualiza el total histórico local tras el reporte exitoso
-      const nuevoTotal = await obtenerTotalHistorico(RUTA_ID)
+      let lat = null, lng = null
+      try {
+        const pos = await new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 8000,
+          })
+        )
+        lat = pos.coords.latitude
+        lng = pos.coords.longitude
+      } catch {
+        // Sin permiso de ubicación → se guarda sin coordenadas
+      }
+
+      await crearReporte(rutaActiva.id, usuario.uid, estadoSelected, lat, lng)
+      const nuevoTotal = await obtenerTotalHistorico(rutaActiva.id)
       setTotalHistorico(nuevoTotal)
       setEstadoSelected(null)
       setMostrarExito(true)
@@ -169,7 +197,7 @@ export default function Mapa() {
 
       {/* Mapa */}
       <div style={{ width: '100%', height: '100%' }}>
-        <MapaLeaflet />
+        <MapaLeaflet posicionBus={posicionBus} rutaCodigo={rutaActiva.codigo} rutaNombre={rutaActiva.nombre} />
       </div>
 
       {/* ── Header flotante ─────────────────────────────── */}
@@ -201,7 +229,7 @@ export default function Mapa() {
             <p style={{ margin: 0, fontSize: '0.875rem', color: '#0f172a', fontWeight: 700 }}>
               {usuario
                 ? `Hola, ${usuario.displayName?.split(' ')[0]} 👋`
-                : 'TransBus — Ruta B1'}
+                : `TransBus — Ruta ${rutaActiva.codigo}`}
             </p>
           </div>
 
@@ -260,29 +288,73 @@ export default function Mapa() {
           }}
         />
 
-        {/* Nombre + badge */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-              <span style={{
-                background: '#e8f0fd', color: '#1d6fe8',
-                fontWeight: 800, fontSize: '0.8125rem', borderRadius: 8, padding: '2px 10px',
-              }}>
-                {RUTA_COD}
-              </span>
+        {/* ── Selector de ruta ───────────────────────────── */}
+        <div style={{ position: 'relative', marginBottom: 10 }}>
+          <button
+            onClick={() => setSelectAbierto(v => !v)}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+              background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14,
+              padding: '10px 14px', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif",
+              textAlign: 'left',
+            }}
+          >
+            <span style={{
+              background: rutaActiva.codigo === 'B1' ? '#e8f0fd' : '#fce7f3',
+              color: rutaActiva.codigo === 'B1' ? '#1d6fe8' : '#be185d',
+              fontWeight: 800, fontSize: '0.875rem', borderRadius: 8, padding: '3px 12px',
+            }}>
+              {rutaActiva.codigo}
+            </span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 600, color: '#0f172a' }}>
+                {rutaActiva.nombre}
+              </p>
             </div>
-            <h2 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a', lineHeight: 1.3 }}>
-              {RUTA_NOMBRE}
-            </h2>
-          </div>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            background: '#dcfce7', color: '#15803d', borderRadius: 999,
-            padding: '4px 10px', fontSize: '0.75rem', fontWeight: 600, flexShrink: 0,
-          }}>
-            <IconCircleCheckFilled size={13} />
-            En servicio
-          </div>
+            <IconChevronDown size={18} color="#94a3b8" style={{
+              transition: 'transform 0.2s',
+              transform: selectAbierto ? 'rotate(180deg)' : 'rotate(0deg)',
+            }} />
+          </button>
+
+          {selectAbierto && (
+            <div style={{
+              position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 600,
+              marginTop: 4, background: '#fff', borderRadius: 14, border: '1px solid #e2e8f0',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden',
+            }}>
+              {RUTAS.filter(r => r.id !== rutaActiva.id).map(r => (
+                <button
+                  key={r.id}
+                  onClick={() => { setRutaActiva(r); setSelectAbierto(false) }}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '12px 14px', border: 'none', background: '#fff',
+                    cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    textAlign: 'left', transition: 'background 0.1s',
+                  }}
+                  onMouseOver={e => e.currentTarget.style.background = '#f8fafc'}
+                  onMouseOut={e => e.currentTarget.style.background = '#fff'}
+                >
+                  <span style={{
+                    background: r.codigo === 'B1' ? '#e8f0fd' : '#fce7f3',
+                    color: r.codigo === 'B1' ? '#1d6fe8' : '#be185d',
+                    fontWeight: 800, fontSize: '0.875rem', borderRadius: 8, padding: '3px 12px',
+                  }}>
+                    {r.codigo}
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 600, color: '#334155' }}>
+                      {r.nombre}
+                    </p>
+                    <p style={{ margin: 0, fontSize: '0.6875rem', color: '#94a3b8' }}>
+                      {r.origen} → {r.destino}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Error global de reportes (ej. falta índice) */}
@@ -337,11 +409,11 @@ export default function Mapa() {
               </span>
             </div>
 
-            {/* Chips secundarios */}
+            {/* Chips secundarios dinámicos */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
-              <InfoChip icon={IconMapPin} label="44 paradas"  color="#7c3aed" bg="#f5f3ff" />
-              <InfoChip icon={IconBus}    label="S/ 2.00"      color="#b45309" bg="#fef3c7" />
-              <InfoChip icon={IconClock}  label="c/ 7 min"    color="#16a34a" bg="#dcfce7" />
+              <InfoChip icon={IconMapPin} label={`${rutaActiva.totalParadas} paradas`} color="#7c3aed" bg="#f5f3ff" />
+              <InfoChip icon={IconBus}    label={`S/ ${rutaActiva.pasaje.toFixed(2)}`}  color="#b45309" bg="#fef3c7" />
+              <InfoChip icon={IconClock}  label={`c/ ${rutaActiva.frecuenciaMin} min`}  color="#16a34a" bg="#dcfce7" />
             </div>
 
             {/* Selector de estado (opcional) */}
@@ -384,8 +456,8 @@ export default function Mapa() {
         {/* Hint contextual */}
         <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', margin: '6px 0 0' }}>
           {usuario
-            ? `Tu reporte #${totalHistorico + 1} en esta ruta 🙌`
-            : '🔒 Necesitas iniciar sesión para reportar'}
+             ? `Tu reporte #${totalHistorico + 1} en ruta ${rutaActiva.codigo} 🙌`
+             : '🔒 Necesitas iniciar sesión para reportar'}
         </p>
       </div>
 
