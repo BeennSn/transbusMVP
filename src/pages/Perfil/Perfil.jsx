@@ -10,6 +10,8 @@ import {
   IconBus,
   IconClock,
   IconMapPin,
+  IconAlertTriangle,
+  IconAward,
 } from '@tabler/icons-react'
 
 /* ── helpers ───────────────────────────────────────────── */
@@ -90,7 +92,9 @@ function PantallaNoSesion() {
 /* ── Pantalla si SÍ hay sesión ─────────────────────────── */
 function PantallaConSesion({ usuario, logout }) {
   const [saliendo, setSaliendo] = useState(false)
-  const { reportes, totalReportes, estaSemana, cargando } = useReportesUsuario(usuario.uid)
+  const { reportes, totalReportes, estaSemana, cargando, error } = useReportesUsuario(usuario.uid)
+
+  const esColaboradorActivo = estaSemana >= 3
 
   async function handleLogout() {
     setSaliendo(true)
@@ -143,14 +147,37 @@ function PantallaConSesion({ usuario, logout }) {
             <p style={{ margin: '0 0 2px', fontWeight: 700, fontSize: '1rem', color: '#0f172a' }}>
               {usuario.displayName ?? 'Sin nombre'}
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
               <IconMail size={13} color="#94a3b8" stroke={2} />
               <p style={{ margin: 0, fontSize: '0.8125rem', color: '#64748b', fontWeight: 500 }}>
                 {usuario.email}
               </p>
             </div>
+            {esColaboradorActivo && (
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                background: '#fef9c3', color: '#a16207', borderRadius: 999,
+                padding: '2px 8px', fontSize: '0.6875rem', fontWeight: 700,
+              }}>
+                <IconAward size={12} stroke={2.5} />
+                Colaborador activo
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Error global */}
+        {error && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: '#fef2f2', borderRadius: 10, padding: '10px 14px',
+          }}>
+            <IconAlertTriangle size={16} color="#dc2626" stroke={2} style={{ flexShrink: 0 }} />
+            <p style={{ margin: 0, fontSize: '0.8125rem', color: '#dc2626', fontWeight: 500, lineHeight: 1.4 }}>
+              {error}
+            </p>
+          </div>
+        )}
 
         {/* Stats reales */}
         <div style={{
@@ -162,9 +189,12 @@ function PantallaConSesion({ usuario, logout }) {
           </p>
 
           {cargando ? (
-            <p style={{ margin: 0, fontSize: '0.875rem', color: '#94a3b8', textAlign: 'center', padding: '8px 0' }}>
-              Cargando tus reportes…
-            </p>
+            <div style={{ animation: 'pulse 1.5s infinite ease-in-out' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ height: 80, background: '#f1f5f9', borderRadius: 12 }} />
+                <div style={{ height: 80, background: '#f1f5f9', borderRadius: 12 }} />
+              </div>
+            </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               {[
@@ -279,6 +309,13 @@ function PantallaConSesion({ usuario, logout }) {
         </button>
 
       </div>
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.5; }
+        }
+      `}</style>
     </main>
   )
 }

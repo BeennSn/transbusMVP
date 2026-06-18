@@ -122,8 +122,8 @@ function SelectorEstado({ seleccionado, onChange }) {
 
 /* ── Página principal ──────────────────────────────────── */
 export default function Mapa() {
-  const { usuario }                      = useAuth()
-  const { cantidadActiva, cargando: cargandoReportes } = useReportesEnVivo(RUTA_ID)
+  const { usuario } = useAuth()
+  const { cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(RUTA_ID)
 
   const [sheetExpanded,  setSheetExpanded]  = useState(false)
   const [mostrarLogin,   setMostrarLogin]   = useState(false)
@@ -285,45 +285,72 @@ export default function Mapa() {
           </div>
         </div>
 
-        {/* Chip de estimación con tier de confianza */}
-        <div style={{
-          display:      'flex',
-          alignItems:   'center',
-          gap:          8,
-          background:   tier.bg,
-          borderRadius: 12,
-          padding:      '10px 14px',
-          marginBottom: 10,
-        }}>
-          <span style={{
-            width: 10, height: 10, borderRadius: '50%',
-            background: tier.dot, flexShrink: 0,
-          }} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: tier.color }}>
-              {tier.label}
-            </p>
-            <p style={{ margin: 0, fontSize: '0.6875rem', color: tier.color, opacity: 0.8 }}>
-              {cargandoReportes ? 'Cargando datos…' : `${cantidadActiva} reporte${cantidadActiva !== 1 ? 's' : ''} en los últimos 15 min`}
+        {/* Error global de reportes (ej. falta índice) */}
+        {errorReportes && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: '#fef2f2', borderRadius: 10, padding: '8px 12px', marginBottom: 10,
+          }}>
+            <IconAlertTriangle size={15} color="#dc2626" stroke={2} style={{ flexShrink: 0 }} />
+            <p style={{ margin: 0, fontSize: '0.8125rem', color: '#dc2626', fontWeight: 500 }}>
+              {errorReportes}
             </p>
           </div>
-          <span style={{ fontSize: '1.125rem', fontWeight: 800, color: tier.color, flexShrink: 0 }}>
-            {tier.tiempo}
-          </span>
-        </div>
+        )}
 
-        {/* Chips secundarios */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
-          <InfoChip icon={IconMapPin} label="44 paradas"  color="#7c3aed" bg="#f5f3ff" />
-          <InfoChip icon={IconBus}    label="S/ 2.00"      color="#b45309" bg="#fef3c7" />
-          <InfoChip icon={IconClock}  label="c/ 7 min"    color="#16a34a" bg="#dcfce7" />
-        </div>
+        {/* Skeleton o Contenido real */}
+        {cargandoReportes ? (
+          <div style={{ animation: 'pulse 1.5s infinite ease-in-out' }}>
+            <div style={{ height: 50, background: '#f1f5f9', borderRadius: 12, marginBottom: 10 }} />
+            <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+              <div style={{ height: 26, width: 80, background: '#f1f5f9', borderRadius: 999 }} />
+              <div style={{ height: 26, width: 60, background: '#f1f5f9', borderRadius: 999 }} />
+            </div>
+            <div style={{ height: 60, background: '#f1f5f9', borderRadius: 12, marginBottom: 10 }} />
+          </div>
+        ) : (
+          <>
+            {/* Chip de estimación con tier de confianza */}
+            <div style={{
+              display:      'flex',
+              alignItems:   'center',
+              gap:          8,
+              background:   tier.bg,
+              borderRadius: 12,
+              padding:      '10px 14px',
+              marginBottom: 10,
+            }}>
+              <span style={{
+                width: 10, height: 10, borderRadius: '50%',
+                background: tier.dot, flexShrink: 0,
+              }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: tier.color }}>
+                  {tier.label}
+                </p>
+                <p style={{ margin: 0, fontSize: '0.6875rem', color: tier.color, opacity: 0.8 }}>
+                  {`${cantidadActiva} reporte${cantidadActiva !== 1 ? 's' : ''} en los últimos 15 min`}
+                </p>
+              </div>
+              <span style={{ fontSize: '1.125rem', fontWeight: 800, color: tier.color, flexShrink: 0 }}>
+                {tier.tiempo}
+              </span>
+            </div>
 
-        {/* Selector de estado (opcional) */}
-        <SelectorEstado
-          seleccionado={estadoSelected}
-          onChange={setEstadoSelected}
-        />
+            {/* Chips secundarios */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+              <InfoChip icon={IconMapPin} label="44 paradas"  color="#7c3aed" bg="#f5f3ff" />
+              <InfoChip icon={IconBus}    label="S/ 2.00"      color="#b45309" bg="#fef3c7" />
+              <InfoChip icon={IconClock}  label="c/ 7 min"    color="#16a34a" bg="#dcfce7" />
+            </div>
+
+            {/* Selector de estado (opcional) */}
+            <SelectorEstado
+              seleccionado={estadoSelected}
+              onChange={setEstadoSelected}
+            />
+          </>
+        )}
 
         {/* Error de reporte */}
         {errorReporte && (
@@ -383,6 +410,10 @@ export default function Mapa() {
         @keyframes blink {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.3; }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.5; }
         }
       `}</style>
     </div>

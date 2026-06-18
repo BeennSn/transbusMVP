@@ -16,20 +16,33 @@ import { escucharReportesUsuario } from '@/services/reportesService'
 export default function useReportesUsuario(uid) {
   const [reportes,  setReportes]  = useState([])
   const [cargando,  setCargando]  = useState(true)
+  const [error,     setError]     = useState(null)
 
   useEffect(() => {
     // Sin uid (sin sesión) no suscribimos nada
     if (!uid) {
       setReportes([])
       setCargando(false)
+      setError(null)
       return
     }
 
     setCargando(true)
-    const unsubscribe = escucharReportesUsuario(uid, (lista) => {
-      setReportes(lista)
-      setCargando(false)
-    })
+    setError(null)
+
+    const unsubscribe = escucharReportesUsuario(
+      uid,
+      (lista) => {
+        setReportes(lista)
+        setCargando(false)
+        setError(null)
+      },
+      (err) => {
+        console.error('[useReportesUsuario]', err)
+        setError('Error al cargar el historial de reportes.')
+        setCargando(false)
+      }
+    )
 
     return unsubscribe
   }, [uid])
@@ -48,5 +61,6 @@ export default function useReportesUsuario(uid) {
     totalReportes: reportes.length,
     estaSemana,
     cargando,
+    error,
   }
 }

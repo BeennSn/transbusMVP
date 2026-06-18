@@ -60,7 +60,7 @@ export async function crearReporte(rutaId, uid, estado = null) {
  * @param {function} callback   Recibe (Array<{id, rutaId, uid, estado, timestamp}>)
  * @returns {function} unsubscribe
  */
-export function escucharReportesActivos(rutaId, callback) {
+export function escucharReportesActivos(rutaId, callback, onError) {
   const hace15min = Timestamp.fromMillis(Date.now() - VENTANA_MIN * 60 * 1000)
 
   const q = query(
@@ -70,13 +70,14 @@ export function escucharReportesActivos(rutaId, callback) {
     orderBy('timestamp', 'desc'),
   )
 
-  return onSnapshot(q, (snapshot) => {
-    const reportes = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }))
-    callback(reportes)
-  })
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const reportes = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }))
+      callback(reportes)
+    },
+    onError ?? ((err) => console.error('[TransBus] escucharReportesActivos:', err.code, err.message)),
+  )
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -109,18 +110,19 @@ export async function obtenerTotalHistorico(rutaId) {
  * @param {function} callback  Recibe (Array<{id, rutaId, uid, estado, timestamp}>)
  * @returns {function} unsubscribe
  */
-export function escucharReportesUsuario(uid, callback) {
+export function escucharReportesUsuario(uid, callback, onError) {
   const q = query(
     collection(db, REPORTES_COL),
     where('uid', '==', uid),
     orderBy('timestamp', 'desc'),
   )
 
-  return onSnapshot(q, (snapshot) => {
-    const reportes = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }))
-    callback(reportes)
-  })
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const reportes = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }))
+      callback(reportes)
+    },
+    onError ?? ((err) => console.error('[TransBus] escucharReportesUsuario:', err.code, err.message)),
+  )
 }
