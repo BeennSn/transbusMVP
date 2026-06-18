@@ -1,0 +1,46 @@
+{
+  "rutas": [
+    {
+      "id": "b1-nuevo-california",
+      "codigo": "B1",
+      "nombre": "B1 de Nuevo California",
+      "operador": "Nuevo California S.A.",
+      "tipo": "Micro",
+      "pasaje": 2.00,
+      "duracionMin": 35,
+      "frecuenciaMin": 7,
+      "sentido": "ida_y_vuelta",
+      "origen": "Avenida Los Tulipanes",
+      "destino": "Avenida Victor Larco Herrera, Vista Alegre",
+      "totalParadas": 44,
+      "paraderosDestacados": [
+        { "orden": 1,  "nombre": "Avenida Los Tulipanes",                "minutosDesdeInicio": 0  },
+        { "orden": 3,  "nombre": "Avenida Cardenales",                   "minutosDesdeInicio": 4  },
+        { "orden": 8,  "nombre": "Avenida José Gabriel Condorcanqui",    "minutosDesdeInicio": 8  },
+        { "orden": 19, "nombre": "Avenida América Norte",                "minutosDesdeInicio": 20 },
+        { "orden": 39, "nombre": "Avenida Victor Larco Herrera",         "minutosDesdeInicio": 40 }
+      ]
+    },
+    {
+      "id": "h-huanchaco",
+      "codigo": "H",
+      "nombre": "H de Huanchaco",
+      "operador": "Huanchaco S.A.",
+      "tipo": "Micro",
+      "pasaje": 2.00,
+      "duracionMin": 35,
+      "frecuenciaMin": 7,
+      "sentido": "circular",
+      "origen": "M-06 \"B\" punto 01",
+      "destino": "M-05 \"H\" punto 25",
+      "totalParadas": 25,
+      "paraderosDestacados": [
+        { "orden": 1,  "nombre": "M-06 \"B\" punto 01",                                         "minutosDesdeInicio": 0  },
+        { "orden": 6,  "nombre": "Avenida Mansiche, Urbanización Santa Inés",                  "minutosDesdeInicio": 12 },
+        { "orden": 11, "nombre": "Plaza Miguel Grau, Urbanización El Recreo 1ª Etapa",         "minutosDesdeInicio": 20 },
+        { "orden": 19, "nombre": "Huanchaco",                                                  "minutosDesdeInicio": 36 },
+        { "orden": 23, "nombre": "Avenida La Rivera",                                          "minutosDesdeInicio": 40 }
+      ]
+    }
+  ]
+}

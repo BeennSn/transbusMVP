@@ -1,0 +1,164 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* ─────────────────────────────────────────────────────
+   TransBus — Design Tokens
+   ───────────────────────────────────────────────────── */
+@theme {
+  /* Colores de marca */
+  --color-primary:       #1d6fe8;
+  --color-primary-light: #e8f0fd;
+  --color-primary-dark:  #1558c0;
+
+  /* Neutros */
+  --color-surface:       #ffffff;
+  --color-bg:            #f5f7fa;
+  --color-border:        #e2e8f0;
+  --color-text-main:     #0f172a;
+  --color-text-muted:    #64748b;
+
+  /* Semánticos */
+  --color-success:       #16a34a;
+  --color-warning:       #d97706;
+  --color-danger:        #dc2626;
+
+  /* Tipografía */
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Border radius */
+  --radius-card: 14px;
+  --radius-pill: 999px;
+}
+
+/* ─────────────────────────────────────────────────────
+   Base / Reset
+   ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+}
+
+#root {
+  width: 100%;
+  max-width: 430px;
+  position: relative;
+  background-color: var(--color-bg);
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────
+   Utilidades comunes
+   ───────────────────────────────────────────────────── */
+.page-container {
+  padding-bottom: 64px;
+  min-height: 100vh;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  width: 100%;
+}
+
+.btn-primary:hover  { background: var(--color-primary-dark); }
+.btn-primary:active { transform: scale(0.97); }
+
+/* ─────────────────────────────────────────────────────
+   Marcador de bus con pulso
+   ───────────────────────────────────────────────────── */
+.bus-marker-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bus-marker-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(29, 111, 232, 0.25);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.bus-marker-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: rgba(29, 111, 232, 0.15);
+  animation: pulse-ring 2s ease-out infinite 0.4s;
+}
+
+.bus-marker-icon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1d6fe8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(29, 111, 232, 0.45);
+  z-index: 1;
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.7); opacity: 0.8; }
+  70%  { transform: scale(1.4); opacity: 0;   }
+  100% { transform: scale(1.4); opacity: 0;   }
+}
+
+/* ─────────────────────────────────────────────────────
+   Bottom sheet del mapa
+   ───────────────────────────────────────────────────── */
+.map-bottom-sheet {
+  position: absolute;
+  bottom: 64px; /* encima del BottomNav */
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px 8px;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.10);
+  z-index: 400; /* encima del mapa Leaflet */
+}
+
+/* Fix: que Leaflet no tape el bottom sheet */
+.leaflet-container {
+  font-family: var(--font-sans);
+}

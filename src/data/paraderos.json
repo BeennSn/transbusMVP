@@ -1,0 +1,58 @@
+{
+  "paraderos": [
+    {
+      "id": "par-ovalo-grau",
+      "nombre": "Óvalo Grau",
+      "referencia": "Av. España con Av. Grau",
+      "rutas": ["B1", "H"],
+      "nivelSeguridad": 5,
+      "notas": "Alta afluencia de gente, bien iluminado, comercio activo las 24h",
+      "horarioPico": "7:00 – 9:00 y 17:00 – 19:00"
+    },
+    {
+      "id": "par-mall-aventura",
+      "nombre": "Mall Aventura Plaza",
+      "referencia": "Av. América Sur con Av. Mansiche",
+      "rutas": ["B1"],
+      "nivelSeguridad": 5,
+      "notas": "Zona muy concurrida, cámaras de seguridad, personal de serenazgo",
+      "horarioPico": "12:00 – 14:00 y 18:00 – 21:00"
+    },
+    {
+      "id": "par-av-america-norte",
+      "nombre": "Avenida América Norte",
+      "referencia": "Cruce Av. América Norte con Jr. Los Brillantes",
+      "rutas": ["B1"],
+      "nivelSeguridad": 4,
+      "notas": "Paradero transitado cerca de zona universitaria, iluminación adecuada",
+      "horarioPico": "7:00 – 9:00 y 13:00 – 15:00"
+    },
+    {
+      "id": "par-huanchaco-centro",
+      "nombre": "Huanchaco Centro",
+      "referencia": "Malecón Grau, frente a la Iglesia de Huanchaco",
+      "rutas": ["H"],
+      "nivelSeguridad": 4,
+      "notas": "Zona turística, presencia policial, iluminado por el muelle",
+      "horarioPico": "8:00 – 11:00 y 16:00 – 18:00"
+    },
+    {
+      "id": "par-plaza-mayor",
+      "nombre": "Plaza Mayor de Trujillo",
+      "referencia": "Jr. Pizarro cuadra 3",
+      "rutas": ["B1", "H"],
+      "nivelSeguridad": 5,
+      "notas": "Centro histórico, cámaras municipales, serenazgo permanente",
+      "horarioPico": "8:00 – 10:00 y 17:00 – 20:00"
+    },
+    {
+      "id": "par-av-larco-vista-alegre",
+      "nombre": "Av. Victor Larco Herrera",
+      "referencia": "Av. Victor Larco Herrera, frente a Urb. Vista Alegre",
+      "rutas": ["B1"],
+      "nivelSeguridad": 3,
+      "notas": "Terminal de la ruta B1, moderado tránsito peatonal, iluminación básica",
+      "horarioPico": "6:30 – 8:30 y 18:00 – 20:00"
+    }
+  ]
+}
