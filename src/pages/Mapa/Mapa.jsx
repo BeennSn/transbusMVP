@@ -148,14 +148,14 @@ export default function Mapa() {
 
   /* ── Carga inicial del contador histórico ─────────────── */
   useEffect(() => {
-    obtenerTotalHistorico(RUTA_ID).then(setTotalHistorico)
+    obtenerTotalHistorico(rutaId).then(setTotalHistorico)
   }, [])
 
   /* ── Derivados ─────────────────────────────────────────── */
   const sentidoActual  = sentidos[sentidoIdx]
   const coordenadasRuta = sentidoActual?.coordenadas?.map(c => [c.latitude, c.longitude]) ?? null
   // Clave única para que MapController detecte cambio de sentido
-  const sentidoKey     = `${RUTA_ID}-${sentidoIdx}`
+  const sentidoKey     = `${rutaId}-${sentidoIdx}`
   const tier           = getTierConfianza(cantidadActiva)
   const esSugerido     = sentidoSugerido !== null && sentidoSugerido === sentidoIdx
 
@@ -165,8 +165,8 @@ export default function Mapa() {
     setEnviando(true)
     setErrorReporte(null)
     try {
-      await crearReporte(RUTA_ID, usuario.uid, estadoSelected)
-      const nuevoTotal = await obtenerTotalHistorico(RUTA_ID)
+      await crearReporte(rutaId, usuario.uid, estadoSelected)
+      const nuevoTotal = await obtenerTotalHistorico(rutaId)
       setTotalHistorico(nuevoTotal)
       setEstadoSelected(null)
       setMostrarExito(true)
