@@ -10,6 +10,7 @@ import {
   IconRefresh,
   IconCircleFilled,
 } from '@tabler/icons-react'
+import ParadasModal from './ParadasModal'
 
 /* ── Paleta de colores por código de ruta ─────────────── */
 const RUTA_COLORS = {
@@ -91,10 +92,17 @@ function TimelineParadas({ paradas, color }) {
  */
 export default function RutaCard({ ruta }) {
   const [expandida, setExpandida] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedSentido, setSelectedSentido] = useState(null)
   const colors = RUTA_COLORS[ruta.codigo] ?? DEFAULT_COLOR
 
   const sentidoLabel = ruta.sentido === 'circular' ? 'Circular' : 'Ida y vuelta'
   const SentidoIcon  = ruta.sentido === 'circular' ? IconRefresh : IconArrowsLeftRight
+
+  const handleVerParadas = (sentido) => {
+    setSelectedSentido(sentido)
+    setModalOpen(true)
+  }
 
   return (
     <article
@@ -179,7 +187,7 @@ export default function RutaCard({ ruta }) {
         {/* Fila 4: chips */}
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           <Chip icon={IconCoin}   color="#b45309" bg="#fef3c7">
-            S/ {ruta.pasaje.toFixed(2)}
+            S/ {typeof ruta.pasaje === 'number' ? ruta.pasaje.toFixed(2) : ruta.pasaje}
           </Chip>
           <Chip icon={IconClock}  color="#1d6fe8" bg="#e8f0fd">
             {ruta.duracionMin} min
@@ -234,8 +242,66 @@ export default function RutaCard({ ruta }) {
           </p>
 
           <TimelineParadas paradas={ruta.paraderosDestacados} color={colors.text} />
+
+          {/* Botones para ver todas las paradas por sentido */}
+          {ruta.sentidos && ruta.sentidos.length > 0 && (
+            <div style={{
+              marginTop: '18px',
+              paddingTop: '14px',
+              borderTop: '1px solid #f1f5f9',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                Ver todas las paradas
+              </p>
+              {ruta.sentidos.map((sentido) => (
+                <button
+                  key={sentido.id}
+                  onClick={() => handleVerParadas(sentido)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    marginBottom: '4px',
+                    backgroundColor: colors.bg,
+                    color: colors.text,
+                    border: `1px solid ${colors.text}`,
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.8125rem',
+                    fontWeight: '600',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = colors.text
+                    e.target.style.color = 'white'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = colors.bg
+                    e.target.style.color = colors.text
+                  }}
+                >
+                  <IconMapPin size={14} stroke={2} />
+                  {sentido.nombre}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Modal de paradas */}
+      <ParadasModal
+        ruta={ruta}
+        sentido={selectedSentido}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </article>
   )
 }

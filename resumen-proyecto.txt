@@ -1,0 +1,151 @@
+# PROYECTO: TransBus (busmvp)
+
+## DESCRIPCIÓN GENERAL
+Aplicación web mobile-first para seguimiento colaborativo de buses en
+Trujillo, Perú. Los usuarios reportan cuando se suben a un bus y ven en
+tiempo real la ubicación estimada del vehículo gracias a los reportes
+de la comunidad.
+
+## TECH STACK
+- React 19.2.6 + react-dom 19.2.6
+- Vite 8.0.12
+- Tailwind CSS 4.3.1 (vía @tailwindcss/vite plugin)
+- Firebase 12.15 (Auth + Firestore)
+- Leaflet 1.9.4 + react-leaflet 5.0.0
+- React Router DOM 7.18.0
+- @tabler/icons-react 3.44.0
+- ESLint 10.3.0 con plugins react-hooks y react-refresh
+
+## ESTRUCTURA DE ARCHIVOS
+busmvp/
+├── .env                        ← Firebase credenciales (ignorado por git)
+├── .env.example                ← Template sin valores
+├── .gitignore
+├── vercel.json                 ← SPA rewrites para Vercel
+├── firestore.indexes.json      ← 2 índices compuestos
+├── index.html
+├── package.json
+├── vite.config.js              ← Alias @ → src/, plugins react + tailwind
+├── eslint.config.js
+└── src/
+    ├── main.jsx                ← Entry point: renderiza <App />
+    ├── App.jsx                 ← <AuthProvider> → <AppRouter />
+    ├── index.css               ← Tailwind + design tokens + animaciones
+    ├── router/
+    │   └── AppRouter.jsx       ← 4 rutas + BottomNav global
+    ├── context/
+    │   └── AuthContext.jsx     ← Provider con useAuth hook integrado
+    ├── services/
+    │   ├── firebase.js         ← initializeApp + auth + db + googleProvider
+    │   ├── authService.js      ← signInWithGoogle, signOut, onAuthChanged
+    │   ├── rutasService.js     ← getRutas(), getRutaById() (desde JSON)
+    │   └── reportesService.js  ← crearReporte, escucharReportesActivos,
+    │                              obtenerTotalHistorico, escucharReportesUsuario
+    ├── hooks/
+    │   ├── useAuth.js          ← Re-export de AuthContext
+    │   ├── useReportesEnVivo.js ← onSnapshot reportes activos (15 min)
+    │   └── useReportesUsuario.js ← onSnapshot reportes por uid + filtro semanal
+    ├── pages/
+    │   ├── Mapa/Mapa.jsx       ← Página principal con mapa + bottom sheet
+    │   ├── Rutas/Rutas.jsx     ← Lista de rutas estáticas
+    │   ├── Paraderos/Paraderos.jsx ← Lista de paraderos ordenados por seguridad
+    │   └── Perfil/Perfil.jsx   ← Login, stats, historial, cerrar sesión
+    └── components/
+        ├── common/BottomNav.jsx       ← Navegación inferior fija (4 tabs)
+        ├── common/LoginModal.jsx      ← Modal login con Google
+        ├── mapa/MapaLeaflet.jsx       ← MapContainer + TileLayer + MarkerBus
+        ├── mapa/MarkerBus.jsx         ← Marcador animado de bus
+        ├── mapa/ModalReporteExito.jsx ← Modal post-reporte exitoso
+        ├── rutas/RutaCard.jsx         ← Tarjeta expandible con timeline
+        └── paraderos/ParaderoCard.jsx ← Tarjeta con indicador de seguridad
+
+## DATA MODELS
+
+### Firestore — Colección "reportes"
+{
+  rutaId:    string,      // ej. "b1-nuevo-california"
+  uid:       string,      // Firebase Auth UID
+  estado:    string|null, // "lleno" | "vacio" | "cambio_ruta" | null
+  lat:       number|null,
+  lng:       number|null,
+  timestamp: serverTimestamp()
+}
+
+### Firestore — Colección "contadores" (documento por rutaId)
+{
+  total: number  // se incrementa atómicamente con increment(1)
+}
+
+### Firestore — Índices compuestos
+1. reportes: rutaId ASC + timestamp DESC
+2. reportes: uid ASC + timestamp DESC
+
+### JSON estático — src/data/rutas.json
+{
+  rutas: [{
+    id: string, codigo: string, nombre: string, operador: string,
+    tipo: string, pasaje: number, duracionMin: number, frecuenciaMin: number,
+    sentido: "ida_y_vuelta"|"circular", origen: string, destino: string,
+    totalParadas: number,
+    paraderosDestacados: [{ orden, nombre, minutosDesdeInicio }]
+  }]
+}
+Actualmente: 2 rutas (B1 y H)
+
+### JSON estático — src/data/paraderos.json
+{
+  paraderos: [{
+    id: string, nombre: string, referencia: string,
+    rutas: string[], nivelSeguridad: 1-5, notas: string,
+    horarioPico: string
+  }]
+}
+Actualmente: 6 paraderos
+
+## RUTAS (React Router)
+/         → Redirige a /mapa
+/mapa     → Mapa.jsx (mapa Leaflet + bottom sheet con selector de ruta
+            + reporte en vivo + tier de confianza + selector de estado)
+/rutas    → Rutas.jsx (lista de RutaCard)
+/paraderos → Paraderos.jsx (lista de ParaderoCard ordenada por seguridad)
+/perfil   → Perfil.jsx (login/logout, stats, historial de reportes)
+
+## FLUJO DE AUTENTICACIÓN
+- Firebase Auth con Google (popup)
+- AuthProvider envuelve toda la app
+- Muestra "Cargando…" hasta que Firebase confirma estado inicial
+- LoginModal aparece al querer reportar sin sesión
+- Perfil tiene login CTA si no hay sesión
+
+## FLUJO DE REPORTE (Mapa.jsx)
+1. Usuario toca "Acabo de subir a este bus"
+2. Si no hay sesión → LoginModal
+3. Obtiene geolocalización (opcional, con timeout 8s)
+4. Crea doc en "reportes" con serverTimestamp
+5. Incrementa contador atómico en "contadores/{rutaId}"
+6. Muestra ModalReporteExito con stats
+
+## SISTEMA DE TIERS (Confianza de estimación)
+0 reportes → "Sin reportes recientes" ~25 min (gris)
+1 reporte  → "Estimación inicial" ~22 min (ámbar)
+2-3 reportes → "Estimación moderada" ~20 min (ámbar)
+4+ reportes  → "Estimación de alta confianza" ~18 min (verde)
+
+## DISEÑO / ESTILOS
+- Mobile-first, ancho máximo 430px, centrado
+- Fuente: Plus Jakarta Sans (Google Fonts)
+- Paleta definida en @theme de Tailwind:
+  primary: #1d6fe8, surface: #ffffff, bg: #f5f7fa, etc.
+- BottomNav fijo abajo (64px) con 4 tabs
+- Bottom sheet en el mapa con selector de ruta dropdown
+- Marcador de bus con animación pulse-ring
+- Modales tipo bottom-sheet con backdrop blur
+
+## BUGS CONOCIDOS
+1. .env tiene trailing commas en cada línea → Firebase fallará
+2. IconConfetti importado pero no usado en ModalReporteExito.jsx
+3. MarkerBus.jsx ejecuta crearIconoBus() incluso cuando invisible=true
+
+## DEPLOY
+- Vercel con rewrites para SPA (vercel.json)
+- Build: vite build
