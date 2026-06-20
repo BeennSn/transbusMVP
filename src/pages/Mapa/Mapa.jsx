@@ -17,11 +17,11 @@ import { useAuth }        from '@/context/AuthContext'
 import useReportesEnVivo  from '@/hooks/useReportesEnVivo'
 import useUbicacionUsuario from '@/hooks/useUbicacionUsuario'
 import { crearReporte, obtenerTotalHistorico } from '@/services/reportesService'
-import { getRutaById }    from '@/services/rutasService'
+import { getRutaById, getRutas } from '@/services/rutasService'
 import { calcularDistanciaEntreDosPuntos } from '@/utils/geo'
 
-/* ── Ruta activa (mock — se puede hacer dinámico más adelante) */
-const RUTA_ID = 'b1-nuevo-california'
+/* ── Todas las rutas disponibles (leídas una sola vez del JSON) */
+const TODAS_LAS_RUTAS = getRutas()
 
 /* ── Colores por código de ruta */
 const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
@@ -93,7 +93,11 @@ function SelectorEstado({ seleccionado, onChange }) {
 /* ── Página principal ──────────────────────────────────── */
 export default function Mapa() {
   const { usuario } = useAuth()
-  const { cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(RUTA_ID)
+
+  /* ── Ruta seleccionada (debe declararse antes de los hooks) */
+  const [rutaId, setRutaId] = useState('b1-nuevo-california')
+
+  const { cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(rutaId)
   const {
     ubicacion,
     permisoPedido,
@@ -102,8 +106,8 @@ export default function Mapa() {
     solicitarUbicacion,
   } = useUbicacionUsuario()
 
-  /* ── Datos de la ruta ──────────────────────────────────── */
-  const rutaData  = getRutaById(RUTA_ID)
+  /* ── Datos reactivos según ruta seleccionada ─────────────── */
+  const rutaData  = getRutaById(rutaId)
   const sentidos  = rutaData?.sentidos ?? []
   const colorRuta = COLORES_RUTA[rutaData?.codigo] ?? '#1d6fe8'
 
@@ -118,6 +122,15 @@ export default function Mapa() {
   const [totalHistorico,  setTotalHistorico]  = useState(0)
   const [errorReporte,    setErrorReporte]    = useState(null)
   const [bannerDismissed, setBannerDismissed] = useState(false)
+
+  /* ── Al cambiar de ruta: resetea sentido e historial ────── */
+  function cambiarRuta(nuevoId) {
+    setRutaId(nuevoId)
+    setSentidoIdx(0)
+    setSentidoSugerido(null)
+    setTotalHistorico(0)
+    obtenerTotalHistorico(nuevoId).then(setTotalHistorico)
+  }
 
   /* ── Auto-selección del sentido más cercano al usuario ── */
   useEffect(() => {
@@ -202,7 +215,7 @@ export default function Mapa() {
               Trujillo, Perú
             </p>
             <p style={{ margin: 0, fontSize: '0.875rem', color: '#0f172a', fontWeight: 700 }}>
-              {usuario ? `Hola, ${usuario.displayName?.split(' ')[0]} 👋` : 'TransBus — Ruta B1'}
+              {usuario ? `Hola, ${usuario.displayName?.split(' ')[0]} 👋` : `TransBus — ${rutaData?.codigo ?? 'B1'}`}
             </p>
           </div>
 
@@ -303,6 +316,54 @@ export default function Mapa() {
             border: 'none', cursor: 'pointer', padding: 0,
           }}
         />
+
+        {/* ── Selector de rutas ────────────────────────────────── */}
+        <div style={{
+          display:        'flex',
+          gap:            8,
+          overflowX:      'auto',
+          marginBottom:   14,
+          paddingBottom:  4,
+          scrollbarWidth: 'none',  /* Firefox */
+          msOverflowStyle: 'none',
+        }}>
+          {TODAS_LAS_RUTAS.map((r) => {
+            const activa  = r.id === rutaId
+            const color   = COLORES_RUTA[r.codigo] ?? '#1d6fe8'
+            return (
+              <button
+                key={r.id}
+                id={`btn-ruta-${r.id}`}
+                onClick={() => cambiarRuta(r.id)}
+                style={{
+                  display:     'inline-flex',
+                  alignItems:  'center',
+                  gap:         6,
+                  flexShrink:  0,
+                  background:  activa ? color : '#f8fafc',
+                  color:       activa ? '#ffffff' : '#475569',
+                  border:      `1.5px solid ${activa ? color : '#e2e8f0'}`,
+                  borderRadius: 999,
+                  padding:     '7px 14px',
+                  fontSize:    '0.8125rem',
+                  fontWeight:  700,
+                  cursor:      'pointer',
+                  transition:  'all 0.18s',
+                  fontFamily:  "'Plus Jakarta Sans', sans-serif",
+                  boxShadow:   activa ? `0 2px 8px ${color}44` : 'none',
+                }}
+              >
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: activa ? '#ffffff' : color,
+                  flexShrink: 0,
+                  opacity: activa ? 0.85 : 1,
+                }} />
+                {r.codigo} — {r.nombre.split(' - ')[1] ?? r.nombre}
+              </button>
+            )
+          })}
+        </div>
 
         {/* Nombre de ruta + badge estado */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
