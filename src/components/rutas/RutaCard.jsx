@@ -12,13 +12,23 @@ import {
 } from '@tabler/icons-react'
 import ParadasModal from './ParadasModal'
 
-/* ── Paleta de colores por código de ruta ─────────────── */
+/* ── Paleta de colores por código de ruta (rutas wikiroutes) ─ */
 const RUTA_COLORS = {
   B1: { bg: '#e8f0fd', text: '#1d6fe8', dot: '#1d6fe8' },
   H:  { bg: '#fce7f3', text: '#be185d', dot: '#be185d' },
 }
 
-const DEFAULT_COLOR = { bg: '#f1f5f9', text: '#475569', dot: '#475569' }
+/**
+ * Resuelve la paleta de colores de una ruta.
+ * Prioridad: colores fijos por código > ruta.color (GTFS) > default gris.
+ */
+function getColores(ruta) {
+  if (RUTA_COLORS[ruta.codigo]) return RUTA_COLORS[ruta.codigo]
+  if (ruta.color) {
+    return { bg: ruta.color + '22', text: ruta.color, dot: ruta.color }
+  }
+  return { bg: '#f1f5f9', text: '#475569', dot: '#475569' }
+}
 
 /* ── Chip pequeño reutilizable ────────────────────────── */
 function Chip({ icon: Icon, children, color = '#64748b', bg = '#f1f5f9' }) {
@@ -94,7 +104,7 @@ export default function RutaCard({ ruta }) {
   const [expandida, setExpandida] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedSentido, setSelectedSentido] = useState(null)
-  const colors = RUTA_COLORS[ruta.codigo] ?? DEFAULT_COLOR
+  const colors = getColores(ruta)
 
   const sentidoLabel = ruta.sentido === 'circular' ? 'Circular' : 'Ida y vuelta'
   const SentidoIcon  = ruta.sentido === 'circular' ? IconRefresh : IconArrowsLeftRight
@@ -186,18 +196,24 @@ export default function RutaCard({ ruta }) {
 
         {/* Fila 4: chips */}
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          <Chip icon={IconCoin}   color="#b45309" bg="#fef3c7">
-            S/ {typeof ruta.pasaje === 'number' ? ruta.pasaje.toFixed(2) : ruta.pasaje}
+          <Chip icon={IconCoin} color="#b45309" bg="#fef3c7">
+            {ruta.pasaje !== null && ruta.pasaje !== undefined
+              ? `S/ ${typeof ruta.pasaje === 'number' ? ruta.pasaje.toFixed(2) : ruta.pasaje}`
+              : (ruta.pasajeNota ?? 'Por confirmar')}
           </Chip>
-          <Chip icon={IconClock}  color="#1d6fe8" bg="#e8f0fd">
-            {ruta.duracionMin} min
-          </Chip>
-          <Chip icon={IconBus}    color="#16a34a" bg="#dcfce7">
+          {ruta.duracionMin != null && (
+            <Chip icon={IconClock} color="#1d6fe8" bg="#e8f0fd">
+              {ruta.duracionMin} min
+            </Chip>
+          )}
+          <Chip icon={IconBus} color="#16a34a" bg="#dcfce7">
             c/ {ruta.frecuenciaMin} min
           </Chip>
-          <Chip icon={IconMapPin} color="#7c3aed" bg="#f5f3ff">
-            {ruta.totalParadas} paradas
-          </Chip>
+          {ruta.totalParadas != null && (
+            <Chip icon={IconMapPin} color="#7c3aed" bg="#f5f3ff">
+              {ruta.totalParadas} paradas
+            </Chip>
+          )}
         </div>
       </button>
 
@@ -236,12 +252,14 @@ export default function RutaCard({ ruta }) {
             </div>
           </div>
 
-          {/* Título paradas destacadas */}
-          <p style={{ margin: '0 0 10px', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-            Paradas destacadas
-          </p>
-
-          <TimelineParadas paradas={ruta.paraderosDestacados} color={colors.text} />
+          {ruta.paraderosDestacados?.length > 0 && (
+            <>
+              <p style={{ margin: '0 0 10px', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                Paradas destacadas
+              </p>
+              <TimelineParadas paradas={ruta.paraderosDestacados} color={colors.text} />
+            </>
+          )}
 
           {/* Botones para ver todas las paradas por sentido */}
           {ruta.sentidos && ruta.sentidos.length > 0 && (

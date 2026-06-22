@@ -9,6 +9,8 @@ import {
   IconArrowsExchange,
   IconX,
   IconCurrentLocation,
+  IconChevronDown,
+  IconSearch,
 } from '@tabler/icons-react'
 import MapaLeaflet        from '@/components/mapa/MapaLeaflet'
 import LoginModal         from '@/components/common/LoginModal'
@@ -18,7 +20,7 @@ import useReportesEnVivo  from '@/hooks/useReportesEnVivo'
 import useUbicacionUsuario from '@/hooks/useUbicacionUsuario'
 import { crearReporte, obtenerTotalHistorico } from '@/services/reportesService'
 import { getRutaById, getRutas } from '@/services/rutasService'
-import { calcularDistanciaEntreDosPuntos } from '@/utils/geo'
+import { calcularDistanciaEntreDosPuntos, normalizarCoordenada } from '@/utils/geo'
 
 /* ── Todas las rutas disponibles (leídas una sola vez del JSON) */
 const TODAS_LAS_RUTAS = getRutas()
@@ -109,7 +111,8 @@ export default function Mapa() {
   /* ── Datos reactivos según ruta seleccionada ─────────────── */
   const rutaData  = getRutaById(rutaId)
   const sentidos  = rutaData?.sentidos ?? []
-  const colorRuta = COLORES_RUTA[rutaData?.codigo] ?? '#1d6fe8'
+  // ruta.color (GTFS) > mapa fijo por código > azul por defecto
+  const colorRuta = rutaData?.color ?? COLORES_RUTA[rutaData?.codigo] ?? '#1d6fe8'
 
   /* ── Estado de UI ──────────────────────────────────────── */
   const [sentidoIdx,      setSentidoIdx]      = useState(0)
@@ -122,6 +125,8 @@ export default function Mapa() {
   const [totalHistorico,  setTotalHistorico]  = useState(0)
   const [errorReporte,    setErrorReporte]    = useState(null)
   const [bannerDismissed, setBannerDismissed] = useState(false)
+  const [showSelector,    setShowSelector]    = useState(false)
+  const [busquedaRuta,    setBusquedaRuta]    = useState('')
 
   /* ── Al cambiar de ruta: resetea sentido e historial ────── */
   function cambiarRuta(nuevoId) {
@@ -138,7 +143,8 @@ export default function Mapa() {
     const distancias = sentidos.map((s) => {
       const p = s.coordenadas?.[0]
       if (!p) return Infinity
-      return calcularDistanciaEntreDosPuntos(ubicacion, [p.latitude, p.longitude])
+      const [lat, lng] = normalizarCoordenada(p)
+      return calcularDistanciaEntreDosPuntos(ubicacion, [lat, lng])
     })
     const idxCercano = distancias.indexOf(Math.min(...distancias))
     setSentidoSugerido(idxCercano)
@@ -152,8 +158,8 @@ export default function Mapa() {
   }, [])
 
   /* ── Derivados ─────────────────────────────────────────── */
-  const sentidoActual  = sentidos[sentidoIdx]
-  const coordenadasRuta = sentidoActual?.coordenadas?.map(c => [c.latitude, c.longitude]) ?? null
+  const sentidoActual   = sentidos[sentidoIdx]
+  const coordenadasRuta = sentidoActual?.coordenadas?.map(normalizarCoordenada) ?? null
   // Clave única para que MapController detecte cambio de sentido
   const sentidoKey     = `${rutaId}-${sentidoIdx}`
   const tier           = getTierConfianza(cantidadActiva)
@@ -317,53 +323,30 @@ export default function Mapa() {
           }}
         />
 
-        {/* ── Selector de rutas ────────────────────────────────── */}
-        <div style={{
-          display:        'flex',
-          gap:            8,
-          overflowX:      'auto',
-          marginBottom:   14,
-          paddingBottom:  4,
-          scrollbarWidth: 'none',  /* Firefox */
-          msOverflowStyle: 'none',
-        }}>
-          {TODAS_LAS_RUTAS.map((r) => {
-            const activa  = r.id === rutaId
-            const color   = COLORES_RUTA[r.codigo] ?? '#1d6fe8'
-            return (
-              <button
-                key={r.id}
-                id={`btn-ruta-${r.id}`}
-                onClick={() => cambiarRuta(r.id)}
-                style={{
-                  display:     'inline-flex',
-                  alignItems:  'center',
-                  gap:         6,
-                  flexShrink:  0,
-                  background:  activa ? color : '#f8fafc',
-                  color:       activa ? '#ffffff' : '#475569',
-                  border:      `1.5px solid ${activa ? color : '#e2e8f0'}`,
-                  borderRadius: 999,
-                  padding:     '7px 14px',
-                  fontSize:    '0.8125rem',
-                  fontWeight:  700,
-                  cursor:      'pointer',
-                  transition:  'all 0.18s',
-                  fontFamily:  "'Plus Jakarta Sans', sans-serif",
-                  boxShadow:   activa ? `0 2px 8px ${color}44` : 'none',
-                }}
-              >
-                <span style={{
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: activa ? '#ffffff' : color,
-                  flexShrink: 0,
-                  opacity: activa ? 0.85 : 1,
-                }} />
-                {r.codigo} — {r.nombre.split(' - ')[1] ?? r.nombre}
-              </button>
-            )
-          })}
-        </div>
+
+        {/* ── Botón selector de ruta ────────────────────────────── */}
+        <button
+          id="btn-cambiar-ruta"
+          onClick={() => setShowSelector(true)}
+          style={{
+            width: '100%', marginBottom: 12,
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: '#f8fafc', border: '1.5px solid #e2e8f0',
+            borderRadius: 12, padding: '9px 14px',
+            cursor: 'pointer', textAlign: 'left',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            transition: 'border-color 0.15s',
+          }}
+        >
+          <span style={{
+            width: 10, height: 10, borderRadius: '50%',
+            background: colorRuta, flexShrink: 0,
+          }} />
+          <span style={{ flex: 1, fontSize: '0.875rem', fontWeight: 700, color: '#0f172a', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {rutaData?.codigo} — {rutaData?.nombre}
+          </span>
+          <IconChevronDown size={16} color="#94a3b8" style={{ flexShrink: 0 }} />
+        </button>
 
         {/* Nombre de ruta + badge estado */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
@@ -390,7 +373,7 @@ export default function Mapa() {
           </div>
         </div>
 
-        {/* Toggle de sentido (ida / vuelta) */}
+        {/* Toggle de sentido — solo si hay más de 1 sentido */}
         {sentidos.length > 1 && (
           <div style={{ marginBottom: 10 }}>
             {esSugerido && ubicacion && (
@@ -530,6 +513,111 @@ export default function Mapa() {
           totalHistorico={totalHistorico}
           nombreUsuario={usuario?.displayName}
         />
+      )}
+
+      {/* ── Modal selector de ruta con búsqueda ─────────── */}
+      {showSelector && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 900,
+          display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+        }}>
+          {/* Overlay */}
+          <div
+            onClick={() => { setShowSelector(false); setBusquedaRuta('') }}
+            style={{ position: 'absolute', inset: 0, background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(2px)' }}
+          />
+          {/* Hoja de selección */}
+          <div style={{
+            position: 'relative', background: '#ffffff',
+            borderRadius: '18px 18px 0 0',
+            maxHeight: '80dvh', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 -4px 30px rgba(0,0,0,0.18)',
+          }}>
+            {/* Handle */}
+            <div style={{ width: 40, height: 4, background: '#e2e8f0', borderRadius: 2, margin: '12px auto 0' }} />
+
+            {/* Header + búsqueda */}
+            <div style={{ padding: '14px 16px 10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <p style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>
+                  Elige una ruta
+                </p>
+                <button
+                  onClick={() => { setShowSelector(false); setBusquedaRuta('') }}
+                  style={{ background: '#f1f5f9', border: 'none', borderRadius: 8, padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                >
+                  <IconX size={18} color="#64748b" />
+                </button>
+              </div>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                background: '#f8fafc', border: '1.5px solid #e2e8f0',
+                borderRadius: 10, padding: '8px 12px',
+              }}>
+                <IconSearch size={15} color="#94a3b8" />
+                <input
+                  autoFocus
+                  type="search"
+                  placeholder="Código, nombre o universidad…"
+                  value={busquedaRuta}
+                  onChange={e => setBusquedaRuta(e.target.value)}
+                  style={{
+                    flex: 1, border: 'none', background: 'transparent',
+                    outline: 'none', fontSize: '0.875rem', color: '#0f172a',
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Lista filtrada */}
+            <div style={{ overflowY: 'auto', flex: 1, padding: '0 8px 16px' }}>
+              {TODAS_LAS_RUTAS
+                .filter(r => {
+                  const q = busquedaRuta.toLowerCase()
+                  if (!q) return true
+                  return r.codigo?.toLowerCase().includes(q) ||
+                         r.nombre?.toLowerCase().includes(q) ||
+                         r.sirveA?.some(u => u.toLowerCase().includes(q))
+                })
+                .map(r => {
+                  const estaActiva = r.id === rutaId
+                  const c = r.color ?? COLORES_RUTA[r.codigo] ?? '#475569'
+                  return (
+                    <button
+                      key={r.id}
+                      id={`modal-ruta-${r.id}`}
+                      onClick={() => { cambiarRuta(r.id); setShowSelector(false); setBusquedaRuta('') }}
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                        background: estaActiva ? c + '18' : 'transparent',
+                        border: 'none', borderRadius: 12, padding: '10px 10px',
+                        cursor: 'pointer', textAlign: 'left',
+                        fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        transition: 'background 0.12s',
+                      }}
+                    >
+                      <span style={{ width: 10, height: 10, borderRadius: '50%', background: c, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ margin: 0, fontSize: '0.875rem', fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ background: c + '22', color: c, fontSize: '0.75rem', borderRadius: 6, padding: '1px 8px', fontWeight: 800 }}>{r.codigo}</span>
+                          {estaActiva && <span style={{ fontSize: '0.6875rem', color: c, fontWeight: 600 }}>● activa</span>}
+                        </p>
+                        <p style={{ margin: 0, fontSize: '0.8125rem', color: '#475569', fontWeight: 500, lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {r.nombre}
+                        </p>
+                        {r.sirveA?.length > 0 && (
+                          <p style={{ margin: '2px 0 0', fontSize: '0.6875rem', color: '#94a3b8', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            🎓 {r.sirveA.join(' · ')}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+            </div>
+          </div>
+        </div>
       )}
 
       <style>{`

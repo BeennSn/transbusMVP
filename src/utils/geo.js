@@ -4,6 +4,18 @@
 const R_KM = 6371 // radio de la Tierra en km
 
 /**
+ * Normaliza una coordenada a [lat, lng] sin importar el formato de origen.
+ * - Rutas antiguas (WikiRoutes): { latitude: number, longitude: number }
+ * - Rutas nuevas (GTFS/OMUS):   [number, number]
+ * @param {Object|Array} c
+ * @returns {[number, number]}
+ */
+export function normalizarCoordenada(c) {
+  if (Array.isArray(c)) return c
+  return [c.latitude, c.longitude]
+}
+
+/**
  * Distancia Haversine entre dos puntos geográficos.
  * @param {[number, number]} punto1  [lat, lng]
  * @param {[number, number]} punto2  [lat, lng]

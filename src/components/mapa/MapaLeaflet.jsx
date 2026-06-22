@@ -117,6 +117,7 @@ export default function MapaLeaflet({
         position={tieneBus ? posicionBus : TRUJILLO_CENTER}
         label={tieneBus ? `${rutaCodigo} · ${rutaNombre}` : 'Bus en servicio'}
         rutaCodigo={rutaCodigo}
+        rutaColor={colorRuta}
       />
 
       {/* ── Marcador "Tú estás aquí" ──────────────────────── */}

@@ -37,10 +37,11 @@ const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
 
 /**
  * MarkerBus — marcador de bus con pulso animado.
- * @param {{ position: [number, number], label?: string, rutaCodigo?: string, invisible?: boolean }} props
+ * @param {{ position: [number, number], label?: string, rutaCodigo?: string, rutaColor?: string, invisible?: boolean }} props
  */
-export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', invisible = false }) {
-  const color = COLORES_RUTA[rutaCodigo] ?? '#1d6fe8'
+export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', rutaColor, invisible = false }) {
+  // rutaColor (prop directa) > mapa fijo por código > azul por defecto
+  const color = rutaColor ?? COLORES_RUTA[rutaCodigo] ?? '#1d6fe8'
   const icono = crearIconoBus(color)
 
   if (invisible) return null

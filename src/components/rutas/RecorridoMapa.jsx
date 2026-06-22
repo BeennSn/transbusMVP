@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Polyline, CircleMarker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { calcularDistanciaTotal } from '@/utils/geo'
+import { calcularDistanciaTotal, normalizarCoordenada } from '@/utils/geo'
 
 export default function RecorridoMapa({ sentido, ruta }) {
   // Validar datos
@@ -8,7 +8,7 @@ export default function RecorridoMapa({ sentido, ruta }) {
   if (!sentido.coordenadas) return <div>Error: Sin coordenadas</div>
   if (sentido.coordenadas.length === 0) return <div>Error: Coordenadas vacías</div>
 
-  const coordenadas = sentido.coordenadas.map(c => [c.latitude, c.longitude])
+  const coordenadas = sentido.coordenadas.map(normalizarCoordenada)
   const centro = coordenadas[Math.floor(coordenadas.length / 2)]
 
   const COLORES = {
