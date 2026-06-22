@@ -17,7 +17,7 @@ import LoginModal         from '@/components/common/LoginModal'
 import ModalReporteExito  from '@/components/mapa/ModalReporteExito'
 import { useAuth }        from '@/context/AuthContext'
 import useReportesEnVivo  from '@/hooks/useReportesEnVivo'
-import useUbicacionUsuario from '@/hooks/useUbicacionUsuario'
+import { useUbicacion }   from '@/context/UbicacionContext'
 import { crearReporte, obtenerTotalHistorico } from '@/services/reportesService'
 import { getRutaById, getRutas } from '@/services/rutasService'
 import { calcularDistanciaEntreDosPuntos, normalizarCoordenada } from '@/utils/geo'
@@ -106,7 +106,7 @@ export default function Mapa() {
     permisoDenegado,
     cargando: cargandoGPS,
     solicitarUbicacion,
-  } = useUbicacionUsuario()
+  } = useUbicacion()
 
   /* ── Datos reactivos según ruta seleccionada ─────────────── */
   const rutaData  = getRutaById(rutaId)

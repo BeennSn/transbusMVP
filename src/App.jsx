@@ -1,10 +1,13 @@
-import { AuthProvider } from '@/context/AuthContext'
-import AppRouter from '@/router/AppRouter'
+import { AuthProvider }     from '@/context/AuthContext'
+import { UbicacionProvider } from '@/context/UbicacionContext'
+import AppRouter             from '@/router/AppRouter'
 
 export default function App() {
   return (
     <AuthProvider>
-      <AppRouter />
+      <UbicacionProvider>
+        <AppRouter />
+      </UbicacionProvider>
     </AuthProvider>
   )
 }
