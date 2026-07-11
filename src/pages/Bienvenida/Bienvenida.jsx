@@ -223,7 +223,7 @@ export default function Bienvenida() {
 
             {/* Cards de beneficios */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 36 }}>
-              {BENEFICIOS.map(({ icon: Icon, color, bg, titulo, texto }, i) => (
+              {BENEFICIOS.map(({ icon: Icon, color, titulo, texto }, i) => (
                 <div
                   key={i}
                   style={{

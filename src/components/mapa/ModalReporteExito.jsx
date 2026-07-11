@@ -1,4 +1,4 @@
-import { IconX, IconConfetti, IconUsers } from '@tabler/icons-react'
+import { IconX, IconUsers } from '@tabler/icons-react'
 
 /**
  * ModalReporteExito — aparece tras un reporte exitoso.

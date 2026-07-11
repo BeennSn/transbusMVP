@@ -1,4 +1,4 @@
-import { IconShieldFilled, IconClock, IconBus } from '@tabler/icons-react'
+import { IconShieldFilled, IconClock } from '@tabler/icons-react'
 
 /* ── Configuración visual por nivel de seguridad ─────── */
 const SEGURIDAD_CONFIG = {

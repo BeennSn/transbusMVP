@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth }             from '@/context/AuthContext'
+import { useAuth }             from '@/hooks/useAuth'
 import useReportesUsuario      from '@/hooks/useReportesUsuario'
 import LoginModal              from '@/components/common/LoginModal'
 import {
@@ -7,9 +7,6 @@ import {
   IconBrandGoogle,
   IconUser,
   IconMail,
-  IconBus,
-  IconClock,
-  IconMapPin,
   IconAlertTriangle,
   IconAward,
 } from '@tabler/icons-react'

@@ -1,8 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { signInWithGoogle, signOut, onAuthChanged } from '@/services/authService'
-
-/* ── Contexto ──────────────────────────────────────────── */
-const AuthContext = createContext(null)
+import { AuthContext } from '@/hooks/useAuth'
 
 /* ── Provider ──────────────────────────────────────────── */
 /**
@@ -66,15 +64,4 @@ export function AuthProvider({ children }) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-/* ── Hook consumidor ────────────────────────────────────── */
-/**
- * useAuth — accede al contexto de autenticación desde cualquier componente.
- * Lanza error si se usa fuera del AuthProvider.
- */
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth debe usarse dentro de <AuthProvider>')
-  return ctx
 }

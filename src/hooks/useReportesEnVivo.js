@@ -16,6 +16,7 @@ export default function useReportesEnVivo(rutaId) {
   useEffect(() => {
     if (!rutaId) return
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- vuelve a mostrar el skeleton al cambiar de ruta, antes de que llegue el primer snapshot
     setCargando(true)
     setError(null)
 

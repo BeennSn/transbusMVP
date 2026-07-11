@@ -12,6 +12,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Cooldown anti-spam: 1 reporte por usuario+ruta cada 3 min.
+    // Duración en minutos — debe coincidir con COOLDOWN_MIN en reportesService.js.
+    function cooldownMin() { return 3; }
+
     // reportes: cada documento es un "acabo de subir a este bus"
     match /reportes/{reporteId} {
       allow read: if true;
@@ -25,10 +29,26 @@ service cloud.firestore {
             || request.resource.data.estado in ['lleno', 'vacio', 'cambio_ruta'])
         && (request.resource.data.lat == null || request.resource.data.lat is number)
         && (request.resource.data.lng == null || request.resource.data.lng is number)
-        && request.resource.data.keys().hasOnly(['rutaId', 'uid', 'estado', 'lat', 'lng', 'timestamp']);
+        && request.resource.data.keys().hasOnly(['rutaId', 'uid', 'estado', 'lat', 'lng', 'timestamp'])
+        && (!exists(/databases/$(database)/documents/ultimosReportes/$(request.auth.uid + '_' + request.resource.data.rutaId))
+            || request.time > get(/databases/$(database)/documents/ultimosReportes/$(request.auth.uid + '_' + request.resource.data.rutaId)).data.timestamp + duration.value(cooldownMin(), 'm'));
 
       // Los reportes son inmutables: ni el autor ni nadie más puede editarlos o borrarlos.
       allow update, delete: if false;
+    }
+
+    // ultimosReportes/{uid}_{rutaId}: marca de tiempo del último reporte de
+    // ese usuario en esa ruta, usada solo para hacer cumplir el cooldown de arriba.
+    match /ultimosReportes/{marcaId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+
+      allow create, update: if request.auth != null
+        && request.auth.uid == request.resource.data.uid
+        && marcaId == request.auth.uid + '_' + request.resource.data.rutaId
+        && request.resource.data.timestamp == request.time
+        && request.resource.data.keys().hasOnly(['uid', 'rutaId', 'timestamp']);
+
+      allow delete: if false;
     }
 
     // contadores/{rutaId}: total histórico acumulado por ruta

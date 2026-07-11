@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { IconBrandGoogle, IconX } from '@tabler/icons-react'
 
 /**
@@ -20,7 +20,7 @@ export default function LoginModal({ onClose, onLoginSuccess }) {
       await login()
       onLoginSuccess?.()
       onClose()
-    } catch (err) {
+    } catch {
       setError('No se pudo iniciar sesión. Intenta de nuevo.')
     } finally {
       setCargando(false)

@@ -1,6 +1,5 @@
-import { createContext, useContext, useRef, useState, useEffect } from 'react'
-
-const UbicacionContext = createContext(null)
+import { useRef, useState, useEffect } from 'react'
+import { UbicacionContext } from '@/hooks/useUbicacion'
 
 /**
  * UbicacionProvider — gestiona la geolocalización GPS a nivel de app.
@@ -16,21 +15,6 @@ export function UbicacionProvider({ children }) {
   const [cargando,        setCargando]        = useState(false)
 
   const watchIdRef = useRef(null)
-
-  // ── Auto-activar si el navegador ya tiene permiso concedido ──
-  // Así al recargar la página no vuelve a pedir ni a mostrar el banner.
-  useEffect(() => {
-    if (!navigator.permissions) return
-    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-      if (result.state === 'granted') {
-        // Permiso ya concedido → arranca el watcher silenciosamente
-        _iniciarWatcher()
-      }
-      // Si es 'prompt' o 'denied' → esperamos que el usuario toque "Activar"
-    }).catch(() => {
-      // API de permisos no disponible → comportamiento normal
-    })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function _iniciarWatcher() {
     if (watchIdRef.current !== null) return // ya está corriendo
@@ -66,6 +50,21 @@ export function UbicacionProvider({ children }) {
     _iniciarWatcher()
   }
 
+  // ── Auto-activar si el navegador ya tiene permiso concedido ──
+  // Así al recargar la página no vuelve a pedir ni a mostrar el banner.
+  useEffect(() => {
+    if (!navigator.permissions) return
+    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      if (result.state === 'granted') {
+        // Permiso ya concedido → arranca el watcher silenciosamente
+        _iniciarWatcher()
+      }
+      // Si es 'prompt' o 'denied' → esperamos que el usuario toque "Activar"
+    }).catch(() => {
+      // API de permisos no disponible → comportamiento normal
+    })
+  }, [])
+
   // Limpiar el watcher al desmontar el árbol (cierre de la app)
   useEffect(() => {
     return () => {
@@ -88,9 +87,3 @@ export function UbicacionProvider({ children }) {
   )
 }
 
-/** Hook de consumo */
-export function useUbicacion() {
-  const ctx = useContext(UbicacionContext)
-  if (!ctx) throw new Error('useUbicacion debe usarse dentro de UbicacionProvider')
-  return ctx
-}

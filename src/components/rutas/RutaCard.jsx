@@ -5,10 +5,8 @@ import {
   IconMapPin,
   IconCoin,
   IconChevronDown,
-  IconChevronUp,
   IconArrowsLeftRight,
   IconRefresh,
-  IconCircleFilled,
 } from '@tabler/icons-react'
 import ParadasModal from './ParadasModal'
 

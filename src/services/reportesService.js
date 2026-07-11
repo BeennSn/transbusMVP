@@ -18,9 +18,11 @@ import {
 } from 'firebase/firestore'
 import { db } from './firebase'
 
-const REPORTES_COL  = 'reportes'
-const CONTADORES_COL = 'contadores'
+const REPORTES_COL       = 'reportes'
+const CONTADORES_COL     = 'contadores'
+const ULTIMOS_REPORTES_COL = 'ultimosReportes'
 const VENTANA_MIN   = 15   // minutos hacia atrás para "reportes activos"
+export const COOLDOWN_MIN = 3  // minutos entre reportes del mismo usuario+ruta — debe coincidir con firestore.rules
 
 /* ─────────────────────────────────────────────────────────
    crearReporte
@@ -49,6 +51,11 @@ export async function crearReporte(rutaId, uid, estado = null, lat = null, lng =
   // 2. Incrementar el contador histórico (crea el doc si no existe)
   const contadorRef = doc(db, CONTADORES_COL, rutaId)
   await setDoc(contadorRef, { total: increment(1) }, { merge: true })
+
+  // 3. Registrar la marca de tiempo del cooldown (firestore.rules la usa para
+  //    rechazar el próximo reporte de este uid+rutaId antes de COOLDOWN_MIN)
+  const ultimoRef = doc(db, ULTIMOS_REPORTES_COL, `${uid}_${rutaId}`)
+  await setDoc(ultimoRef, { uid, rutaId, timestamp: ahora })
 }
 
 /* ─────────────────────────────────────────────────────────

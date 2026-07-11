@@ -44,7 +44,7 @@ function MapController({ coordenadasRuta, ubicacionUsuario, sentidoKey }) {
     try {
       const bounds = L.latLngBounds(puntos)
       map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
-    } catch (e) {
+    } catch {
       // bounds inválido (e.g. un solo punto) → no hace nada
     }
   }, [sentidoKey, ubicacionUsuario, coordenadasRuta, map])

@@ -15,10 +15,10 @@ import {
 import MapaLeaflet        from '@/components/mapa/MapaLeaflet'
 import LoginModal         from '@/components/common/LoginModal'
 import ModalReporteExito  from '@/components/mapa/ModalReporteExito'
-import { useAuth }        from '@/context/AuthContext'
+import { useAuth }        from '@/hooks/useAuth'
 import useReportesEnVivo  from '@/hooks/useReportesEnVivo'
-import { useUbicacion }   from '@/context/UbicacionContext'
-import { crearReporte, obtenerTotalHistorico } from '@/services/reportesService'
+import { useUbicacion }   from '@/hooks/useUbicacion'
+import { crearReporte, obtenerTotalHistorico, COOLDOWN_MIN } from '@/services/reportesService'
 import { getRutaById, getRutas } from '@/services/rutasService'
 import { calcularDistanciaEntreDosPuntos, normalizarCoordenada } from '@/utils/geo'
 
@@ -28,10 +28,30 @@ const TODAS_LAS_RUTAS = getRutas()
 /* ── Colores por código de ruta */
 const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
 
+/* ── Cooldown de reportes (persistido en localStorage por ruta) ──
+   El límite real lo hace cumplir firestore.rules; esto solo evita que
+   el usuario legítimo golpee el botón sin necesidad y le muestra cuánto
+   falta. */
+const cooldownKey = (rutaId) => `transbus_cooldown_${rutaId}`
+
+function segundosCooldownRestante(rutaId) {
+  const hasta = Number(localStorage.getItem(cooldownKey(rutaId)) ?? 0)
+  return Math.max(0, Math.ceil((hasta - Date.now()) / 1000))
+}
+
+function formatMMSS(segundos) {
+  const m = Math.floor(segundos / 60)
+  const s = segundos % 60
+  return `${m}:${String(s).padStart(2, '0')}`
+}
+
 /* ─────────────────────────────────────────────────────────
    Tiers de confianza (lógica validada — no modificar)
+   Exportada (sin tocar el cuerpo) solo para poder testearla en aislamiento;
+   se queda en este archivo a propósito en vez de moverse a utils/.
 ───────────────────────────────────────────────────────── */
-function getTierConfianza(cantidad) {
+// eslint-disable-next-line react-refresh/only-export-components -- export solo para tests, la lógica se queda intencionalmente en este archivo
+export function getTierConfianza(cantidad) {
   if (cantidad === 0) return { label: 'Sin reportes recientes', tiempo: '~25 min', color: '#64748b', bg: '#f1f5f9', dot: '#94a3b8' }
   if (cantidad === 1) return { label: 'Estimación inicial',     tiempo: '~22 min', color: '#b45309', bg: '#fef3c7', dot: '#f59e0b' }
   if (cantidad <= 3)  return { label: 'Estimación moderada',    tiempo: '~20 min', color: '#b45309', bg: '#fef3c7', dot: '#f59e0b' }
@@ -104,7 +124,6 @@ export default function Mapa() {
     ubicacion,
     permisoPedido,
     permisoDenegado,
-    cargando: cargandoGPS,
     solicitarUbicacion,
   } = useUbicacion()
 
@@ -127,14 +146,15 @@ export default function Mapa() {
   const [bannerDismissed, setBannerDismissed] = useState(false)
   const [showSelector,    setShowSelector]    = useState(false)
   const [busquedaRuta,    setBusquedaRuta]    = useState('')
+  const [cooldownRestante, setCooldownRestante] = useState(() => segundosCooldownRestante(rutaId))
 
   /* ── Al cambiar de ruta: resetea sentido e historial ────── */
+  // El efecto de "Contador histórico" reacciona a rutaId y recarga el total.
   function cambiarRuta(nuevoId) {
     setRutaId(nuevoId)
     setSentidoIdx(0)
     setSentidoSugerido(null)
     setTotalHistorico(0)
-    obtenerTotalHistorico(nuevoId).then(setTotalHistorico)
   }
 
   /* ── Auto-selección del sentido más cercano al usuario ── */
@@ -147,15 +167,30 @@ export default function Mapa() {
       return calcularDistanciaEntreDosPuntos(ubicacion, [lat, lng])
     })
     const idxCercano = distancias.indexOf(Math.min(...distancias))
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- deriva el sentido sugerido de la ubicación GPS, no hay forma de calcularlo durante el render
     setSentidoSugerido(idxCercano)
     setSentidoIdx(idxCercano)
   }, [ubicacion]) // eslint-disable-line react-hooks/exhaustive-deps
   // (sentidos no cambia en runtime, no necesita ser dep)
 
-  /* ── Carga inicial del contador histórico ─────────────── */
+  /* ── Contador histórico: se recarga cada vez que cambia la ruta ── */
   useEffect(() => {
     obtenerTotalHistorico(rutaId).then(setTotalHistorico)
-  }, [])
+  }, [rutaId])
+
+  /* ── Cooldown de reportes: recalcula al cambiar de ruta y cuenta hacia atrás ── */
+  useEffect(() => {
+    setCooldownRestante(segundosCooldownRestante(rutaId)) // eslint-disable-line react-hooks/set-state-in-effect
+  }, [rutaId])
+
+  useEffect(() => {
+    if (cooldownRestante <= 0) return
+    const id = setInterval(() => {
+      setCooldownRestante((s) => Math.max(0, s - 1))
+    }, 1000)
+    return () => clearInterval(id)
+  }, [cooldownRestante > 0]) // eslint-disable-line react-hooks/exhaustive-deps
+  // (solo necesita re-armar el interval al entrar/salir de cooldown, no cada segundo)
 
   /* ── Derivados ─────────────────────────────────────────── */
   const sentidoActual   = sentidos[sentidoIdx]
@@ -176,8 +211,14 @@ export default function Mapa() {
       setTotalHistorico(nuevoTotal)
       setEstadoSelected(null)
       setMostrarExito(true)
-    } catch {
-      setErrorReporte('No se pudo enviar el reporte. Intenta de nuevo.')
+      localStorage.setItem(cooldownKey(rutaId), String(Date.now() + COOLDOWN_MIN * 60 * 1000))
+      setCooldownRestante(COOLDOWN_MIN * 60)
+    } catch (err) {
+      setErrorReporte(
+        err.code === 'permission-denied'
+          ? `Ya reportaste esta ruta hace poco. Espera unos minutos antes de volver a reportar.`
+          : 'No se pudo enviar el reporte. Intenta de nuevo.'
+      )
     } finally {
       setEnviando(false)
     }
@@ -485,11 +526,19 @@ export default function Mapa() {
           id="btn-reporte-bus"
           className="btn-primary"
           onClick={handleReporte}
-          disabled={enviando}
-          style={{ marginBottom: 4, opacity: enviando ? 0.7 : 1, cursor: enviando ? 'not-allowed' : 'pointer' }}
+          disabled={enviando || cooldownRestante > 0}
+          style={{
+            marginBottom: 4,
+            opacity: (enviando || cooldownRestante > 0) ? 0.7 : 1,
+            cursor: (enviando || cooldownRestante > 0) ? 'not-allowed' : 'pointer',
+          }}
         >
           <IconBus size={18} stroke={2.2} />
-          {enviando ? 'Enviando reporte…' : 'Acabo de subir a este bus'}
+          {enviando
+            ? 'Enviando reporte…'
+            : cooldownRestante > 0
+              ? `Ya reportaste — espera ${formatMMSS(cooldownRestante)}`
+              : 'Acabo de subir a este bus'}
         </button>
 
         <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', margin: '6px 0 0' }}>

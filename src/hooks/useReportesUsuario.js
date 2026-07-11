@@ -21,6 +21,7 @@ export default function useReportesUsuario(uid) {
   useEffect(() => {
     // Sin uid (sin sesión) no suscribimos nada
     if (!uid) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset síncrono al perder sesión, no hay "external system" que sincronizar aquí
       setReportes([])
       setCargando(false)
       setError(null)
@@ -49,6 +50,7 @@ export default function useReportesUsuario(uid) {
 
   // Filtro de "esta semana" (últimos 7 días) en el cliente
   // para no necesitar un índice compuesto adicional
+  // eslint-disable-next-line react-hooks/purity -- Date.now() se recalcula cada render a propósito, la ventana debe ser siempre "ahora - 7d"
   const hace7dias   = Date.now() - 7 * 24 * 60 * 60 * 1000
   const estaSemana  = reportes.filter((r) => {
     // timestamp puede ser un Timestamp de Firestore o un número
