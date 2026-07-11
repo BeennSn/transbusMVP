@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// Reglas de seguridad de Firestore para TransBus.
+// Modelo: cualquiera puede LEER reportes/contadores (el contador "en vivo" y el
+// mapa se muestran sin sesión iniciada), pero solo un usuario autenticado puede
+// crear un reporte a su propio nombre, y los reportes son inmutables.
+//
+// Nota de privacidad: los reportes son de lectura pública (rutaId, uid, estado,
+// lat/lng). Es necesario para que el contador "X activos" funcione sin login,
+// pero implica que la ubicación aproximada del reporte y el uid quedan visibles
+// para cualquiera con el SDK/REST de Firestore, no solo dentro de la app.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // reportes: cada documento es un "acabo de subir a este bus"
+    match /reportes/{reporteId} {
+      allow read: if true;
+
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.rutaId is string
+        && request.resource.data.rutaId.size() > 0
+        && request.resource.data.timestamp == request.time
+        && (request.resource.data.estado == null
+            || request.resource.data.estado in ['lleno', 'vacio', 'cambio_ruta'])
+        && (request.resource.data.lat == null || request.resource.data.lat is number)
+        && (request.resource.data.lng == null || request.resource.data.lng is number)
+        && request.resource.data.keys().hasOnly(['rutaId', 'uid', 'estado', 'lat', 'lng', 'timestamp']);
+
+      // Los reportes son inmutables: ni el autor ni nadie más puede editarlos o borrarlos.
+      allow update, delete: if false;
+    }
+
+    // contadores/{rutaId}: total histórico acumulado por ruta
+    match /contadores/{rutaId} {
+      allow read: if true;
+
+      // Primer reporte de la ruta: crea el documento en 1.
+      allow create: if request.auth != null
+        && request.resource.data.total == 1
+        && request.resource.data.keys().hasOnly(['total']);
+
+      // Reportes siguientes: solo puede subir de a 1, nunca saltar ni bajar.
+      allow update: if request.auth != null
+        && request.resource.data.total == resource.data.total + 1
+        && request.resource.data.keys().hasOnly(['total']);
+
+      allow delete: if false;
+    }
+
+    // Cualquier otra colección: denegado por defecto.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

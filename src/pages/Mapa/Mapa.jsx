@@ -171,7 +171,7 @@ export default function Mapa() {
     setEnviando(true)
     setErrorReporte(null)
     try {
-      await crearReporte(rutaId, usuario.uid, estadoSelected)
+      await crearReporte(rutaId, usuario.uid, estadoSelected, ubicacion?.[0] ?? null, ubicacion?.[1] ?? null)
       const nuevoTotal = await obtenerTotalHistorico(rutaId)
       setTotalHistorico(nuevoTotal)
       setEstadoSelected(null)
@@ -457,9 +457,9 @@ export default function Mapa() {
 
             {/* Chips secundarios */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
-              <InfoChip icon={IconMapPin} label="44 paradas"  color="#7c3aed" bg="#f5f3ff" />
-              <InfoChip icon={IconBus}    label="S/ 2.00"     color="#b45309" bg="#fef3c7" />
-              <InfoChip icon={IconClock}  label="c/ 7 min"   color="#16a34a" bg="#dcfce7" />
+              <InfoChip icon={IconMapPin} label={`${rutaData?.totalParadas ?? sentidoActual?.paradas?.length ?? '—'} paradas`} color="#7c3aed" bg="#f5f3ff" />
+              <InfoChip icon={IconBus}    label={rutaData?.pasaje ? `S/ ${rutaData.pasaje}` : 'Tarifa variable'} color="#b45309" bg="#fef3c7" />
+              <InfoChip icon={IconClock}  label={rutaData?.frecuenciaMin ? `c/ ${rutaData.frecuenciaMin} min` : '—'} color="#16a34a" bg="#dcfce7" />
             </div>
 
             {/* Selector de estado */}

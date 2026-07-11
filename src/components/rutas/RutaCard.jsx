@@ -206,9 +206,11 @@ export default function RutaCard({ ruta }) {
               {ruta.duracionMin} min
             </Chip>
           )}
-          <Chip icon={IconBus} color="#16a34a" bg="#dcfce7">
-            c/ {ruta.frecuenciaMin} min
-          </Chip>
+          {ruta.frecuenciaMin != null && (
+            <Chip icon={IconBus} color="#16a34a" bg="#dcfce7">
+              c/ {ruta.frecuenciaMin} min
+            </Chip>
+          )}
           {ruta.totalParadas != null && (
             <Chip icon={IconMapPin} color="#7c3aed" bg="#f5f3ff">
               {ruta.totalParadas} paradas
