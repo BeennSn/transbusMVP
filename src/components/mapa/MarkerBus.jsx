@@ -39,12 +39,12 @@ const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
  * MarkerBus — marcador de bus con pulso animado.
  * @param {{ position: [number, number], label?: string, rutaCodigo?: string, rutaColor?: string, invisible?: boolean }} props
  */
-export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', rutaColor, invisible = false }) {
+export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', rutaColor, tiempoTexto = null, invisible = false }) {
+  if (invisible) return null
+
   // rutaColor (prop directa) > mapa fijo por código > azul por defecto
   const color = rutaColor ?? COLORES_RUTA[rutaCodigo] ?? '#1d6fe8'
   const icono = crearIconoBus(color)
-
-  if (invisible) return null
 
   return (
     <Marker position={position} icon={icono}>
@@ -66,7 +66,7 @@ export default function MarkerBus({ position, label = '', rutaCodigo = 'B1', rut
           fontWeight: 500,
           marginTop:  '2px',
         }}>
-          Reportado en vivo · En servicio
+          Reportado {tiempoTexto ?? 'en vivo'}
         </div>
       </Popup>
     </Marker>

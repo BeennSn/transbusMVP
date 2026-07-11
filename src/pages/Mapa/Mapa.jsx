@@ -21,12 +21,19 @@ import { useUbicacion }   from '@/hooks/useUbicacion'
 import { crearReporte, obtenerTotalHistorico, COOLDOWN_MIN } from '@/services/reportesService'
 import { getRutaById, getRutas } from '@/services/rutasService'
 import { calcularDistanciaEntreDosPuntos, normalizarCoordenada } from '@/utils/geo'
+import { formatTiempoRelativo } from '@/utils/tiempo'
 
 /* ── Todas las rutas disponibles (leídas una sola vez del JSON) */
 const TODAS_LAS_RUTAS = getRutas()
 
 /* ── Colores por código de ruta */
 const COLORES_RUTA = { B1: '#1d6fe8', H: '#be185d' }
+
+/* ── Altura del bottom sheet colapsado ("peek"): solo lo esencial,
+   deja ver más mapa. Los banners flotantes de ubicación usan el mismo
+   valor para no quedar pegados al sheet. */
+const SHEET_PEEK_HEIGHT = 230
+const BANNER_BOTTOM = SHEET_PEEK_HEIGHT + 70 // deja espacio para la altura propia del banner + margen
 
 /* ── Cooldown de reportes (persistido en localStorage por ruta) ──
    El límite real lo hace cumplir firestore.rules; esto solo evita que
@@ -119,7 +126,7 @@ export default function Mapa() {
   /* ── Ruta seleccionada (debe declararse antes de los hooks) */
   const [rutaId, setRutaId] = useState('b1-nuevo-california')
 
-  const { cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(rutaId)
+  const { reportesActivos, cantidadActiva, cargando: cargandoReportes, error: errorReportes } = useReportesEnVivo(rutaId)
   const {
     ubicacion,
     permisoPedido,
@@ -192,6 +199,13 @@ export default function Mapa() {
   }, [cooldownRestante > 0]) // eslint-disable-line react-hooks/exhaustive-deps
   // (solo necesita re-armar el interval al entrar/salir de cooldown, no cada segundo)
 
+  /* ── Reloj de referencia para "hace X min", se refresca cada 30s ── */
+  const [ahoraMs, setAhoraMs] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setAhoraMs(Date.now()), 30_000)
+    return () => clearInterval(id)
+  }, [])
+
   /* ── Derivados ─────────────────────────────────────────── */
   const sentidoActual   = sentidos[sentidoIdx]
   const coordenadasRuta = sentidoActual?.coordenadas?.map(normalizarCoordenada) ?? null
@@ -199,6 +213,12 @@ export default function Mapa() {
   const sentidoKey     = `${rutaId}-${sentidoIdx}`
   const tier           = getTierConfianza(cantidadActiva)
   const esSugerido     = sentidoSugerido !== null && sentidoSugerido === sentidoIdx
+
+  // Posición del bus en el mapa: el reporte más reciente que incluya ubicación
+  // (reportesActivos ya viene ordenado del más nuevo al más antiguo)
+  const ultimoReporteConUbicacion = reportesActivos.find((r) => r.lat != null && r.lng != null)
+  const posicionBus    = ultimoReporteConUbicacion ? [ultimoReporteConUbicacion.lat, ultimoReporteConUbicacion.lng] : null
+  const tiempoBusTexto = ultimoReporteConUbicacion ? formatTiempoRelativo(ultimoReporteConUbicacion.timestamp, ahoraMs) : null
 
   /* ── Flujo de reporte ─────────────────────────────────── */
   async function handleReporte() {
@@ -231,6 +251,8 @@ export default function Mapa() {
       {/* ── Mapa ────────────────────────────────────────── */}
       <div style={{ width: '100%', height: '100%' }}>
         <MapaLeaflet
+          posicionBus={posicionBus}
+          tiempoBusTexto={tiempoBusTexto}
           rutaCodigo={rutaData?.codigo ?? 'B1'}
           rutaNombre={rutaData?.nombre ?? ''}
           ubicacionUsuario={ubicacion}
@@ -294,9 +316,9 @@ export default function Mapa() {
       </div>
 
       {/* ── Banner de ubicación (antes del primer permiso) ── */}
-      {!permisoPedido && !bannerDismissed && (
+      {!sheetExpanded && !permisoPedido && !bannerDismissed && (
         <div style={{
-          position: 'absolute', bottom: 310, left: 16, right: 16, zIndex: 600,
+          position: 'absolute', bottom: BANNER_BOTTOM, left: 16, right: 16, zIndex: 600,
           background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(10px)',
           borderRadius: 14, padding: '12px 14px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0',
@@ -330,9 +352,9 @@ export default function Mapa() {
       )}
 
       {/* ── Aviso discreto si permiso denegado ──────────── */}
-      {permisoPedido && permisoDenegado && (
+      {!sheetExpanded && permisoPedido && permisoDenegado && (
         <div style={{
-          position: 'absolute', bottom: 310, left: 16, right: 16, zIndex: 600,
+          position: 'absolute', bottom: BANNER_BOTTOM, left: 16, right: 16, zIndex: 600,
           background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: 12,
           padding: '9px 14px', display: 'flex', alignItems: 'center', gap: 8,
         }}>
@@ -348,7 +370,7 @@ export default function Mapa() {
         id="mapa-bottom-sheet"
         className="map-bottom-sheet"
         style={{
-          maxHeight:  sheetExpanded ? '80%' : '300px',
+          maxHeight:  sheetExpanded ? '80%' : `${SHEET_PEEK_HEIGHT}px`,
           transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
           overflowY:  'auto',
         }}
@@ -389,68 +411,72 @@ export default function Mapa() {
           <IconChevronDown size={16} color="#94a3b8" style={{ flexShrink: 0 }} />
         </button>
 
-        {/* Nombre de ruta + badge estado */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-              <span style={{
-                background: colorRuta + '22', color: colorRuta,
-                fontWeight: 800, fontSize: '0.8125rem', borderRadius: 8, padding: '2px 10px',
+        {/* Nombre de ruta + badge estado + toggle de sentido — solo si el sheet está expandido */}
+        {sheetExpanded && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                  <span style={{
+                    background: colorRuta + '22', color: colorRuta,
+                    fontWeight: 800, fontSize: '0.8125rem', borderRadius: 8, padding: '2px 10px',
+                  }}>
+                    {rutaData?.codigo ?? 'B1'}
+                  </span>
+                </div>
+                <h2 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a', lineHeight: 1.3 }}>
+                  {rutaData?.nombre ?? 'B1 de Nuevo California'}
+                </h2>
+              </div>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                background: '#dcfce7', color: '#15803d', borderRadius: 999,
+                padding: '4px 10px', fontSize: '0.75rem', fontWeight: 600, flexShrink: 0,
               }}>
-                {rutaData?.codigo ?? 'B1'}
-              </span>
+                <IconCircleCheckFilled size={13} />
+                En servicio
+              </div>
             </div>
-            <h2 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a', lineHeight: 1.3 }}>
-              {rutaData?.nombre ?? 'B1 de Nuevo California'}
-            </h2>
-          </div>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            background: '#dcfce7', color: '#15803d', borderRadius: 999,
-            padding: '4px 10px', fontSize: '0.75rem', fontWeight: 600, flexShrink: 0,
-          }}>
-            <IconCircleCheckFilled size={13} />
-            En servicio
-          </div>
-        </div>
 
-        {/* Toggle de sentido — solo si hay más de 1 sentido */}
-        {sentidos.length > 1 && (
-          <div style={{ marginBottom: 10 }}>
-            {esSugerido && ubicacion && (
-              <p style={{
-                margin: '0 0 6px', fontSize: '0.6875rem', color: '#b45309',
-                fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4,
-              }}>
-                ✦ Sugerido según tu ubicación
-              </p>
+            {/* Toggle de sentido — solo si hay más de 1 sentido */}
+            {sentidos.length > 1 && (
+              <div style={{ marginBottom: 10 }}>
+                {esSugerido && ubicacion && (
+                  <p style={{
+                    margin: '0 0 6px', fontSize: '0.6875rem', color: '#b45309',
+                    fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4,
+                  }}>
+                    ✦ Sugerido según tu ubicación
+                  </p>
+                )}
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {sentidos.map((s, idx) => {
+                    const activo = idx === sentidoIdx
+                    return (
+                      <button
+                        key={s.id ?? idx}
+                        id={`btn-sentido-${idx}`}
+                        onClick={() => { setSentidoIdx(idx); setSentidoSugerido(null) }}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 5,
+                          flex: 1, justifyContent: 'center',
+                          background: activo ? colorRuta : '#f8fafc',
+                          color:      activo ? '#ffffff'  : '#475569',
+                          border:    `1.5px solid ${activo ? colorRuta : '#e2e8f0'}`,
+                          borderRadius: 999, padding: '7px 10px',
+                          fontSize: '0.8125rem', fontWeight: 700, cursor: 'pointer',
+                          transition: 'all 0.15s', fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        }}
+                      >
+                        <IconArrowsExchange size={14} stroke={2} />
+                        {s.nombre ?? `Sentido ${idx + 1}`}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             )}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {sentidos.map((s, idx) => {
-                const activo = idx === sentidoIdx
-                return (
-                  <button
-                    key={s.id ?? idx}
-                    id={`btn-sentido-${idx}`}
-                    onClick={() => { setSentidoIdx(idx); setSentidoSugerido(null) }}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 5,
-                      flex: 1, justifyContent: 'center',
-                      background: activo ? colorRuta : '#f8fafc',
-                      color:      activo ? '#ffffff'  : '#475569',
-                      border:    `1.5px solid ${activo ? colorRuta : '#e2e8f0'}`,
-                      borderRadius: 999, padding: '7px 10px',
-                      fontSize: '0.8125rem', fontWeight: 700, cursor: 'pointer',
-                      transition: 'all 0.15s', fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    }}
-                  >
-                    <IconArrowsExchange size={14} stroke={2} />
-                    {s.nombre ?? `Sentido ${idx + 1}`}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+          </>
         )}
 
         {/* Error de Firestore */}
@@ -496,15 +522,18 @@ export default function Mapa() {
               </span>
             </div>
 
-            {/* Chips secundarios */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
-              <InfoChip icon={IconMapPin} label={`${rutaData?.totalParadas ?? sentidoActual?.paradas?.length ?? '—'} paradas`} color="#7c3aed" bg="#f5f3ff" />
-              <InfoChip icon={IconBus}    label={rutaData?.pasaje ? `S/ ${rutaData.pasaje}` : 'Tarifa variable'} color="#b45309" bg="#fef3c7" />
-              <InfoChip icon={IconClock}  label={rutaData?.frecuenciaMin ? `c/ ${rutaData.frecuenciaMin} min` : '—'} color="#16a34a" bg="#dcfce7" />
-            </div>
+            {/* Chips secundarios + selector de estado — solo si el sheet está expandido */}
+            {sheetExpanded && (
+              <>
+                <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+                  <InfoChip icon={IconMapPin} label={`${rutaData?.totalParadas ?? sentidoActual?.paradas?.length ?? '—'} paradas`} color="#7c3aed" bg="#f5f3ff" />
+                  <InfoChip icon={IconBus}    label={rutaData?.pasaje ? `S/ ${rutaData.pasaje}` : 'Tarifa variable'} color="#b45309" bg="#fef3c7" />
+                  <InfoChip icon={IconClock}  label={rutaData?.frecuenciaMin ? `c/ ${rutaData.frecuenciaMin} min` : '—'} color="#16a34a" bg="#dcfce7" />
+                </div>
 
-            {/* Selector de estado */}
-            <SelectorEstado seleccionado={estadoSelected} onChange={setEstadoSelected} />
+                <SelectorEstado seleccionado={estadoSelected} onChange={setEstadoSelected} />
+              </>
+            )}
           </>
         )}
 

@@ -57,7 +57,8 @@ function MapController({ coordenadasRuta, ubicacionUsuario, sentidoKey }) {
 ───────────────────────────────────────────────────────── */
 /**
  * @param {{
- *   posicionBus?:      [number, number] | null,
+ *   posicionBus?:      [number, number] | null,   — posición del reporte más reciente con ubicación, o null si no hay ninguno
+ *   tiempoBusTexto?:   string | null,              — p.ej. "hace 3 min", para el popup del marcador
  *   rutaCodigo?:       string,
  *   rutaNombre?:       string,
  *   ubicacionUsuario?: [number, number] | null,
@@ -68,6 +69,7 @@ function MapController({ coordenadasRuta, ubicacionUsuario, sentidoKey }) {
  */
 export default function MapaLeaflet({
   posicionBus     = null,
+  tiempoBusTexto  = null,
   rutaCodigo      = 'B1',
   rutaNombre      = '',
   ubicacionUsuario = null,
@@ -112,13 +114,16 @@ export default function MapaLeaflet({
         />
       )}
 
-      {/* ── Marcador del bus (mock) ────────────────────────── */}
-      <MarkerBus
-        position={tieneBus ? posicionBus : TRUJILLO_CENTER}
-        label={tieneBus ? `${rutaCodigo} · ${rutaNombre}` : 'Bus en servicio'}
-        rutaCodigo={rutaCodigo}
-        rutaColor={colorRuta}
-      />
+      {/* ── Marcador del bus: solo se muestra si hay un reporte real con ubicación ── */}
+      {tieneBus && (
+        <MarkerBus
+          position={posicionBus}
+          label={`${rutaCodigo} · ${rutaNombre}`}
+          tiempoTexto={tiempoBusTexto}
+          rutaCodigo={rutaCodigo}
+          rutaColor={colorRuta}
+        />
+      )}
 
       {/* ── Marcador "Tú estás aquí" ──────────────────────── */}
       {ubicacionUsuario && (
