@@ -22,6 +22,7 @@ import { crearReporte, obtenerTotalHistorico, COOLDOWN_MIN } from '@/services/re
 import { getRutaById, getRutas } from '@/services/rutasService'
 import { calcularDistanciaEntreDosPuntos, normalizarCoordenada } from '@/utils/geo'
 import { formatTiempoRelativo } from '@/utils/tiempo'
+import { rutaCoincideBusqueda } from '@/utils/busqueda'
 
 /* ── Todas las rutas disponibles (leídas una sola vez del JSON) */
 const TODAS_LAS_RUTAS = getRutas()
@@ -651,13 +652,7 @@ export default function Mapa() {
             {/* Lista filtrada */}
             <div style={{ overflowY: 'auto', flex: 1, padding: '0 8px 16px' }}>
               {TODAS_LAS_RUTAS
-                .filter(r => {
-                  const q = busquedaRuta.toLowerCase()
-                  if (!q) return true
-                  return r.codigo?.toLowerCase().includes(q) ||
-                         r.nombre?.toLowerCase().includes(q) ||
-                         r.sirveA?.some(u => u.toLowerCase().includes(q))
-                })
+                .filter(r => rutaCoincideBusqueda(r, busquedaRuta))
                 .map(r => {
                   const estaActiva = r.id === rutaId
                   const c = r.color ?? COLORES_RUTA[r.codigo] ?? '#475569'

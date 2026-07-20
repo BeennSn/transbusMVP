@@ -1570,7 +1570,13 @@
       ],
       "nota": "Autorizado por la Gerencia de Transporte, Tránsito y Seguridad Vial de Trujillo, Transportes Metropolitanos de Trujillo (TMT) y la Municipalidad Provincial de Trujillo (MPT)",
       "origen": "Avenida El Sol - Avenida San Pedro",
-      "destino": "Avenida Libertad - Avenida Víctor Larco Herrera"
+      "destino": "Avenida Libertad - Avenida Víctor Larco Herrera",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Universidad César Vallejo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "h-huanchaco",
@@ -4900,7 +4906,15 @@
       ],
       "nota": "Empresa de Transportes Huanchaco S.A. (ETHSA)\nRuta M-05 (Huanchaco - Huanchaco)\nSeudónimo: La H - La H Corazón\n\nAutorizado por la Gerencia de Transporte, Tránsito y Seguridad Vial de Trujillo, Transportes Metropolitanos de Trujillo (TMT) y la Municipalidad Provincial de Trujillo (MPT)",
       "origen": "Avenida La Paz",
-      "destino": "Avenida Circunvalación"
+      "destino": "Avenida Circunvalación",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-01-b",
@@ -5577,7 +5591,11 @@
           "lng": -79.0677498
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-06-k",
@@ -6254,7 +6272,10 @@
           "lng": -79.0745743
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-07-v",
@@ -6931,7 +6952,12 @@
           "lng": -79.0468432
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad César Vallejo",
+        "ULADECH Trujillo"
+      ]
     },
     {
       "id": "c-07-z1",
@@ -8285,7 +8311,12 @@
           "lng": -79.0380882
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo"
+      ]
     },
     {
       "id": "m-21-a",
@@ -8962,7 +8993,12 @@
           "lng": -79.0225101
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda"
+      ]
     },
     {
       "id": "m-22-f",
@@ -9639,7 +9675,13 @@
           "lng": -79.0225101
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-20-ui",
@@ -10930,7 +10972,13 @@
           "lng": -78.9796712
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-11-t1",
@@ -12221,7 +12269,13 @@
           "lng": -79.0334263
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-34-a",
@@ -12898,7 +12952,11 @@
           "lng": -79.0659779
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-20-c",
@@ -13575,7 +13633,12 @@
           "lng": -78.976072
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Universidad Católica de Trujillo"
+      ]
     },
     {
       "id": "c-10-m",
@@ -14252,7 +14315,10 @@
           "lng": -79.0198924
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "c-14-s",
@@ -14929,7 +14995,10 @@
           "lng": -78.9976455
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "c-21-r",
@@ -15606,7 +15675,13 @@
           "lng": -78.9796712
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-22-m",
@@ -16897,7 +16972,11 @@
           "lng": -79.0001258
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-23-b-3",
@@ -17574,7 +17653,10 @@
           "lng": -79.0369485
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo"
+      ]
     },
     {
       "id": "m-23-b",
@@ -18251,7 +18333,12 @@
           "lng": -79.0496786
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad César Vallejo",
+        "Mercado La Hermelinda"
+      ]
     },
     {
       "id": "c-03-jj",
@@ -18928,7 +19015,11 @@
           "lng": -79.0740014
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "c-05-b1",
@@ -19605,7 +19696,11 @@
           "lng": -79.0726778
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-12-b",
@@ -20282,7 +20377,13 @@
           "lng": -79.0233573
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-13-d",
@@ -21573,7 +21674,13 @@
           "lng": -79.0223596
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-16-i",
@@ -22250,7 +22357,14 @@
           "lng": -78.999141
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-23-s1",
@@ -23604,7 +23718,11 @@
           "lng": -78.9942687
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "c-24-h2",
@@ -24281,7 +24399,12 @@
           "lng": -78.9625956
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-24-h1",
@@ -24958,7 +25081,12 @@
           "lng": -78.9575191
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-25-s2",
@@ -26312,7 +26440,12 @@
           "lng": -79.008786
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "c-28-c",
@@ -26989,7 +27122,12 @@
           "lng": -79.0087154
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo"
+      ]
     },
     {
       "id": "c-35-s3",
@@ -29020,7 +29158,12 @@
           "lng": -79.056839
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo"
+      ]
     },
     {
       "id": "c-42-b2",
@@ -29697,7 +29840,11 @@
           "lng": -79.0772665
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-02-a",
@@ -30374,7 +30521,15 @@
           "lng": -79.0527562
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad César Vallejo",
+        "Real Plaza Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "c-44-t2",
@@ -31665,7 +31820,13 @@
           "lng": -79.0318519
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-05-h",
@@ -32342,7 +32503,15 @@
           "lng": -79.1146839
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "ct-23-ac",
@@ -35727,7 +35896,13 @@
           "lng": -79.0702295
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Real Plaza Trujillo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "ct-23-a",
@@ -37758,7 +37933,15 @@
           "lng": -79.1155744
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-06-b",
@@ -38435,7 +38618,12 @@
           "lng": -79.1146839
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-08-a",
@@ -39112,7 +39300,13 @@
           "lng": -79.0727908
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Universidad César Vallejo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-09-bc",
@@ -39789,7 +39983,13 @@
           "lng": -79.0572438
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Universidad César Vallejo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-10-b1",
@@ -40466,7 +40666,13 @@
           "lng": -79.057299
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "Universidad César Vallejo",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-12-c",
@@ -41143,7 +41349,12 @@
           "lng": -79.0532431
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo"
+      ]
     },
     {
       "id": "m-13-c1",
@@ -41820,7 +42031,12 @@
           "lng": -78.9909254
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-15-c2",
@@ -42497,7 +42713,13 @@
           "lng": -79.0575329
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-15-c2vr",
@@ -43174,7 +43396,14 @@
           "lng": -78.9909254
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada del Norte",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-17-c2",
@@ -43851,7 +44080,14 @@
           "lng": -79.0085012
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-18-c1",
@@ -44528,7 +44764,11 @@
           "lng": -79.0129607
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-19-a",
@@ -45205,7 +45445,12 @@
           "lng": -79.0085012
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-31-a",
@@ -45882,7 +46127,15 @@
           "lng": -79.044003
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "Universidad César Vallejo",
+        "Real Plaza Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-32-a1",
@@ -46559,7 +46812,13 @@
           "lng": -79.044003
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Nacional de Trujillo",
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-33-b",
@@ -47236,7 +47495,12 @@
           "lng": -79.066157
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo"
+      ]
     },
     {
       "id": "m-34-a-3",
@@ -47913,7 +48177,11 @@
           "lng": -79.0665764
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "m-36-lv",
@@ -48590,7 +48858,13 @@
           "lng": -79.0207602
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada Antenor Orrego",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Real Plaza Trujillo"
+      ]
     },
     {
       "id": "ct-01-a",
@@ -49267,7 +49541,11 @@
           "lng": -79.0601817
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-02-a",
@@ -49944,7 +50222,11 @@
           "lng": -79.0232574
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-15-a",
@@ -52652,7 +52934,12 @@
           "lng": -79.0232574
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-27-l",
@@ -53329,7 +53616,12 @@
           "lng": -79.0232574
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-29-ta",
@@ -54683,7 +54975,11 @@
           "lng": -79.0231142
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-10-a",
@@ -55360,7 +55656,11 @@
           "lng": -79.0182156
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "m-35-d",
@@ -56037,7 +56337,13 @@
           "lng": -79.0824088
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada del Norte",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "ct-21-f",
@@ -59422,7 +59728,11 @@
           "lng": -79.0223957
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-26-au",
@@ -60776,7 +61086,11 @@
           "lng": -79.0232574
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-04-a",
@@ -61453,7 +61767,11 @@
           "lng": -79.0232574
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad César Vallejo",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-08-am",
@@ -62130,7 +62448,11 @@
           "lng": -79.0158245
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "ct-14-sl",
@@ -62807,7 +63129,11 @@
           "lng": -79.0146201
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-12-sl",
@@ -65515,7 +65841,10 @@
           "lng": -79.0249959
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado La Hermelinda"
+      ]
     },
     {
       "id": "c-41-z2",
@@ -66869,7 +67198,13 @@
           "lng": -79.0220679
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Católica de Trujillo",
+        "Mercado Mayorista",
+        "Mercado La Hermelinda",
+        "Mercado La Noria"
+      ]
     },
     {
       "id": "m-35-d-3",
@@ -67546,7 +67881,13 @@
           "lng": -79.0827495
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Universidad Privada del Norte",
+        "ULADECH Trujillo",
+        "Mall Plaza Trujillo",
+        "Mercado Mayorista"
+      ]
     },
     {
       "id": "ct-06-v-a",
@@ -68223,7 +68564,11 @@
           "lng": -79.0223957
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-07-v-a",
@@ -68900,7 +69245,11 @@
           "lng": -79.0223957
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado Mayorista",
+        "Mercado Central"
+      ]
     },
     {
       "id": "ct-22-a",
@@ -73639,7 +73988,10 @@
           "lng": -79.0249959
         }
       ],
-      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual."
+      "nota": "Generado automáticamente desde el GTFS de Trujillo-OMUS (Trufi Association / Municipalidad de Trujillo, datos OpenStreetMap). Tarifa y frecuencia no están en la fuente y requieren verificación manual.",
+      "sirveA": [
+        "Mercado La Hermelinda"
+      ]
     }
   ]
 }

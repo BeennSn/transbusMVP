@@ -1,0 +1,101 @@
+{
+  "_fuente": "Coordenadas obtenidas de OpenStreetMap Nominatim (misma fuente que el GTFS de Trujillo-OMUS)",
+  "lugares": [
+    {
+      "id": "unt",
+      "nombre": "Universidad Nacional de Trujillo",
+      "categoria": "universidad",
+      "alias": ["unt", "universidad nacional", "nacional de trujillo"],
+      "lat": -8.1146349,
+      "lng": -79.0385842
+    },
+    {
+      "id": "upao",
+      "nombre": "Universidad Privada Antenor Orrego",
+      "categoria": "universidad",
+      "alias": ["upao", "antenor orrego"],
+      "lat": -8.1279781,
+      "lng": -79.0323441
+    },
+    {
+      "id": "ucv",
+      "nombre": "Universidad César Vallejo",
+      "categoria": "universidad",
+      "alias": ["ucv", "cesar vallejo", "césar vallejo"],
+      "lat": -8.1293533,
+      "lng": -79.0436547
+    },
+    {
+      "id": "upn",
+      "nombre": "Universidad Privada del Norte",
+      "categoria": "universidad",
+      "alias": ["upn", "privada del norte"],
+      "lat": -8.0957519,
+      "lng": -79.0497210
+    },
+    {
+      "id": "uct",
+      "nombre": "Universidad Católica de Trujillo",
+      "categoria": "universidad",
+      "alias": ["uct", "catolica de trujillo", "católica de trujillo", "benedicto xvi"],
+      "lat": -8.1608407,
+      "lng": -79.0107339
+    },
+    {
+      "id": "uladech",
+      "nombre": "ULADECH Trujillo",
+      "categoria": "universidad",
+      "alias": ["uladech"],
+      "lat": -8.1005591,
+      "lng": -79.0421745
+    },
+    {
+      "id": "mall-plaza",
+      "nombre": "Mall Plaza Trujillo",
+      "categoria": "mall",
+      "alias": ["mall", "mall aventura", "mall plaza", "el mall"],
+      "lat": -8.1036870,
+      "lng": -79.0478657
+    },
+    {
+      "id": "real-plaza",
+      "nombre": "Real Plaza Trujillo",
+      "categoria": "mall",
+      "alias": ["real plaza"],
+      "lat": -8.1320262,
+      "lng": -79.0305342
+    },
+    {
+      "id": "mercado-mayorista",
+      "nombre": "Mercado Mayorista",
+      "categoria": "mercado",
+      "alias": ["mayorista", "mercado mayorista"],
+      "lat": -8.1116957,
+      "lng": -79.0198977
+    },
+    {
+      "id": "mercado-hermelinda",
+      "nombre": "Mercado La Hermelinda",
+      "categoria": "mercado",
+      "alias": ["hermelinda", "la hermelinda"],
+      "lat": -8.0910740,
+      "lng": -79.0253412
+    },
+    {
+      "id": "mercado-noria",
+      "nombre": "Mercado La Noria",
+      "categoria": "mercado",
+      "alias": ["noria", "la noria"],
+      "lat": -8.1045024,
+      "lng": -79.0101359
+    },
+    {
+      "id": "mercado-central",
+      "nombre": "Mercado Central",
+      "categoria": "mercado",
+      "alias": ["mercado central", "central"],
+      "lat": -8.1122604,
+      "lng": -79.0256970
+    }
+  ]
+}

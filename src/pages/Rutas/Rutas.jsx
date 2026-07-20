@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getRutas } from '@/services/rutasService'
 import RutaCard from '@/components/rutas/RutaCard'
+import { rutaCoincideBusqueda } from '@/utils/busqueda'
 import { IconBus, IconSearch, IconX } from '@tabler/icons-react'
 
 const TODAS_LAS_RUTAS = getRutas()
@@ -8,17 +9,7 @@ const TODAS_LAS_RUTAS = getRutas()
 export default function Rutas() {
   const [busqueda, setBusqueda] = useState('')
 
-  const rutasFiltradas = busqueda.trim() === ''
-    ? TODAS_LAS_RUTAS
-    : TODAS_LAS_RUTAS.filter((r) => {
-        const q = busqueda.toLowerCase()
-        return (
-          r.codigo?.toLowerCase().includes(q)   ||
-          r.nombre?.toLowerCase().includes(q)   ||
-          r.operador?.toLowerCase().includes(q) ||
-          r.sirveA?.some(s => s.toLowerCase().includes(q))
-        )
-      })
+  const rutasFiltradas = TODAS_LAS_RUTAS.filter((r) => rutaCoincideBusqueda(r, busqueda))
 
   return (
     <main className="page-container" style={{ background: '#f5f7fa' }}>
